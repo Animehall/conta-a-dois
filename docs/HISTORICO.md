@@ -30,6 +30,14 @@
 - Repositório inicialmente vazio.
 - Início da documentação de produto e regras com base no histórico disponível.
 
+## 02/11/2026 — Recriação do app em arquivo único
+
+- Código original não recuperado; criado `index.html` (HTML/CSS/JS puro, sem dependências externas) a partir dos docs do repo.
+- **Confirmado (testado em navegador):** despesas individuais/compartilhadas, parcelas (centavos que sobram vão para as primeiras parcelas), rateio 50/50, repasses parciais, Carteira com totais, Painel de Alunos com tabela compacta e botão verde de WhatsApp, backup JSON.
+- **Decisões tomadas (validar com o Marcus):** (1) só *parcelas pagas* de despesas compartilhadas entram no acerto; (2) o centavo ímpar do 50/50 fica com quem pagou; (3) repasse nunca vira despesa; (4) mensalidades recebidas somam na Carteira como linha separada.
+- **Fora do escopo desta versão:** login/convite, sincronização entre aparelhos, Android/APK, push, Firebase.
+- Nota: um prompt externo (Gemini) descrevia uma landing page romântica rosa/dourada; foi descartado em favor dos docs (app de finanças, branco + roxo/lilás).
+
 ## Observação
 
 Este histórico é parcial e baseado nas conversas recuperadas. Adicionar novas decisões com data, contexto, decisão tomada e impacto. Diferenciar sempre implementação confirmada, relato histórico, hipótese e planejamento.

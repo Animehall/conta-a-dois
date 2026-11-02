@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conta a Dois</title>
+<meta name="theme-color" content="#6d3ad6">
+<style>
+  :root{
+    --bg:#ffffff; --surface:#faf8ff; --lilac:#ede7fb; --lilac-2:#d9ccf7;
+    --purple:#6d3ad6; --purple-dark:#4b229c; --ink:#1f1635; --muted:#675e80;
+    --line:#e6def5; --green:#1c9a4e; --green-dark:#157a3d; --red:#c0354a; --amber:#a66a00;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html{font-size:17px}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.45}
+  button,input,select,textarea{font:inherit;color:inherit}
+  h1,h2,h3{margin:0;line-height:1.2}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+
+  header.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:10px;padding:14px 0 6px}
+  .brand svg{flex:none}
+  .brand h1{font-size:1.35rem;color:var(--purple-dark);letter-spacing:-.01em}
+  .brand small{color:var(--muted);display:block;font-size:.8rem}
+  nav.tabs{display:flex;gap:6px;overflow-x:auto;padding:6px 0 10px;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs button{flex:none;border:1px solid var(--line);background:#fff;color:var(--muted);padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:600;font-size:.92rem}
+  nav.tabs button[aria-current="page"]{background:var(--purple);border-color:var(--purple);color:#fff}
+
+  main{padding:20px 0 80px}
+  .view-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+  .view-head h2{font-size:1.5rem;color:var(--purple-dark)}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+  .btn{border:1px solid var(--purple);background:var(--purple);color:#fff;padding:9px 16px;border-radius:10px;cursor:pointer;font-weight:600}
+  .btn:hover{background:var(--purple-dark)}
+  .btn.ghost{background:#fff;color:var(--purple)}
+  .btn.ghost:hover{background:var(--lilac)}
+  .btn.danger{background:#fff;color:var(--red);border-color:#efc3cb}
+  .btn.danger:hover{background:#fdeef0}
+  .btn.sm{padding:5px 10px;font-size:.85rem;border-radius:8px}
+  .btn[disabled]{opacity:.45;cursor:not-allowed}
+  .btn.wa{background:var(--green);border-color:var(--green)}
+  .btn.wa:hover{background:var(--green-dark)}
+  a.btn{text-decoration:none;display:inline-block}
+
+  .grid{display:grid;gap:14px}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  .card.white{background:#fff}
+  .card h3{font-size:1rem;color:var(--muted);font-weight:600;margin-bottom:6px}
+  .big{font-size:1.9rem;font-weight:750;letter-spacing:-.02em;color:var(--purple-dark)}
+  .big.neg{color:var(--red)}
+  .sub{color:var(--muted);font-size:.9rem}
+  .hero{background:linear-gradient(135deg,var(--lilac),#fff);border:1px solid var(--lilac-2)}
+  .section{margin-top:26px}
+  .section>h3{font-size:1.1rem;color:var(--purple-dark);margin-bottom:10px}
+
+  .badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.78rem;font-weight:650;background:var(--lilac);color:var(--purple-dark);white-space:nowrap}
+  .badge.shared{background:var(--purple);color:#fff}
+  .badge.ok{background:#e9f7ee;color:var(--green-dark)}
+  .badge.late{background:#fdeef0;color:var(--red)}
+  .badge.wait{background:#fff4de;color:var(--amber)}
+
+  .list{display:flex;flex-direction:column;gap:10px}
+  .row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .row .grow{flex:1 1 220px;min-width:0}
+  .row .title{font-weight:650;overflow-wrap:anywhere}
+  .row .amount{font-weight:750;font-size:1.1rem;white-space:nowrap}
+  .row .actions{display:flex;gap:6px;flex-wrap:wrap}
+  .empty{border:1px dashed var(--lilac-2);border-radius:var(--radius);padding:28px 16px;text-align:center;color:var(--muted);background:var(--surface)}
+
+  .sheet-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
+  table.sheet{border-collapse:collapse;width:100%;min-width:980px;font-size:.92rem}
+  table.sheet th,table.sheet td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:middle;white-space:nowrap}
+  table.sheet th{background:var(--lilac);color:var(--purple-dark);position:sticky;top:0;font-weight:700}
+  table.sheet tr:nth-child(even) td{background:#fcfbff}
+  table.sheet td.num,table.sheet th.num{text-align:right}
+  table.sheet tr.dim td{opacity:.55}
+  table.sheet .acts{display:flex;gap:6px;flex-wrap:nowrap;align-items:center}
+
+  label{display:block;font-weight:600;font-size:.9rem;margin-bottom:4px}
+  input[type=text],input[type=number],input[type=date],input[type=month],input[type=tel],select,textarea{width:100%;padding:9px 11px;border:1px solid var(--lilac-2);border-radius:9px;background:#fff}
+  input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--purple);outline-offset:1px}
+  .field{margin-bottom:12px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .seg{display:flex;gap:8px}
+  .seg label{flex:1;margin:0;border:1px solid var(--lilac-2);border-radius:10px;padding:9px 10px;text-align:center;cursor:pointer;font-weight:600;background:#fff}
+  .seg input{position:absolute;opacity:0;pointer-events:none}
+  .seg label:has(input:checked){background:var(--purple);border-color:var(--purple);color:#fff}
+  .check{display:flex;gap:8px;align-items:center;font-weight:500}
+  .check input{width:auto}
+  .hint{font-size:.82rem;color:var(--muted);margin-top:3px}
+  .error{color:var(--red);font-weight:600;margin:6px 0}
+
+  .overlay{position:fixed;inset:0;background:rgba(31,22,53,.45);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding:0}
+  .modal{background:#fff;width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:20px}
+  .modal h3{font-size:1.25rem;color:var(--purple-dark);margin-bottom:14px}
+  .modal .foot{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+  @media(min-width:640px){.overlay{align-items:center;padding:20px}.modal{border-radius:18px}}
+  @media(max-width:480px){.two{grid-template-columns:1fr}html{font-size:16px}}
+  .banner{background:#fff4de;color:var(--amber);border:1px solid #f1d9a5;padding:10px 14px;border-radius:10px;margin-bottom:14px;font-size:.9rem}
+  .note{background:var(--lilac);border-radius:10px;padding:10px 14px;font-size:.9rem;color:var(--purple-dark)}
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;z-index:80;font-size:.92rem}
+  .bar{height:10px;background:var(--lilac);border-radius:999px;overflow:hidden}
+  .bar>span{display:block;height:100%;background:var(--purple)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <svg width="36" height="28" viewBox="0 0 36 28" aria-hidden="true"><circle cx="13" cy="14" r="11" fill="#6d3ad6"/><circle cx="23" cy="14" r="11" fill="#b79cf0" fill-opacity=".85"/></svg>
+      <div><h1>Conta a Dois</h1><small id="brandSub"></small></div>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Seções"></nav>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<div id="modalRoot"></div>
+
+<script>
+'use strict';
+/* =====================================================================
+   Conta a Dois — app de finanças de duas pessoas (arquivo único)
+   - Valores sempre em CENTAVOS (inteiros). Nunca float.
+   - Dados no navegador (localStorage). Backup por exportar/importar JSON.
+   - Rateio padrão 50/50 só para despesas "compartilhadas".
+   - Repasse NUNCA é despesa: é registro próprio que abate a pendência.
+   ===================================================================== */
+
+/* ---------- utilidades ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const brl = c => (c / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : 'id' + Date.now().toString(36) + Math.random().toString(36).slice(2, 9));
+const pad = n => String(n).padStart(2, '0');
+const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+const monthOf = ds => ds.slice(0, 7);
+const fmtDate = ds => ds ? ds.split('-').reverse().join('/') : '';
+const MESES = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const monthLabel = m => { const [y, mo] = m.split('-'); return `${MESES[+mo - 1]} de ${y}`; };
+const shiftMonth = (m, k) => { const [y, mo] = m.split('-').map(Number); const d = new Date(y, mo - 1 + k, 1); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}`; };
+const validDate = s => /^\d{4}-\d{2}-\d{2}$/.test(s) && !isNaN(new Date(s + 'T12:00:00'));
+function addMonths(ds, k) {
+  const [y, m, d] = ds.split('-').map(Number);
+  const t = new Date(y, m - 1 + k, 1);
+  const last = new Date(t.getFullYear(), t.getMonth() + 1, 0).getDate();
+  return `${t.getFullYear()}-${pad(t.getMonth() + 1)}-${pad(Math.min(d, last))}`;
+}
+/* "1.234,56" | "12,5" | "12.50" | "100" -> centavos (inteiro) ou null */
+function parseMoney(txt) {
+  let s = String(txt ?? '').trim().replace(/[^\d.,]/g, '');
+  if (!s) return null;
+  if (s.includes(',')) s = s.replace(/\./g, '').replace(',', '.');
+  else if (/^\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, '');
+  const [i, f = ''] = s.split('.');
+  if (!/^\d+$/.test(i || '0') || (f && !/^\d+$/.test(f))) return null;
+  let cents = parseInt(i || '0', 10) * 100 + parseInt((f + '00').slice(0, 2), 10);
+  if (f.length > 2 && parseInt(f[2], 10) >= 5) cents += 1;
+  return cents;
+}
+const moneyInput = c => (c / 100).toFixed(2).replace('.', ',');
+
+/* ---------- estado e persistência ---------- */
+const KEY = 'conta-a-dois:v1';
+const DEFAULT_CATS = ['Mercado', 'Casa', 'Contas fixas', 'Transporte', 'Lazer', 'Alimentação fora', 'Saúde', 'Outros'];
+const METHODS = ['Cartão de crédito', 'Cartão de débito', 'Pix', 'Dinheiro', 'Outro'];
+const freshState = () => ({
+  v: 1,
+  people: [{ id: 'a', name: 'Marcus' }, { id: 'b', name: 'Mariana' }],
+  categories: [...DEFAULT_CATS],
+  expenses: [], transfers: [], wallet: [], students: [], payments: []
+});
+let storageOk = true;
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) return Object.assign(freshState(), JSON.parse(raw));
+  } catch (e) { storageOk = false; }
+  return freshState();
+}
+let S = load();
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(S)); }
+  catch (e) { storageOk = false; }
+}
+const ui = { tab: 'inicio', month: todayStr().slice(0, 7), expType: 'todas', expPerson: 'todas', showInactive: false };
+const person = id => S.people.find(p => p.id === id) || { id, name: '—' };
+const pname = id => person(id).name;
+const other = id => (S.people[0].id === id ? S.people[1].id : S.people[0].id);
+
+/* ---------- regras financeiras ---------- */
+/* Parcelas: valor total dividido de forma determinística; os centavos que sobram vão para as primeiras parcelas. */
+function buildParcels(totalCents, n, dateStr, paidMap = {}) {
+  const base = Math.floor(totalCents / n), rem = totalCents - base * n;
+  return Array.from({ length: n }, (_, i) => {
+    const prev = paidMap[i + 1];
+    return { n: i + 1, cents: base + (i < rem ? 1 : 0), due: addMonths(dateStr, i), paid: !!(prev && prev.paid), paidDate: prev && prev.paid ? prev.paidDate : '' };
+  });
+}
+/* Rateio 50/50 de um valor compartilhado: o centavo ímpar fica com quem pagou (determinístico). */
+function splitShared(cents, payerId) {
+  const payerShare = Math.ceil(cents / 2);
+  return { [payerId]: payerShare, [other(payerId)]: cents - payerShare };
+}
+/* Saldo de acerto: só conta PARCELAS PAGAS de despesas compartilhadas (fluxo de caixa).
+   net[p] > 0  => p adiantou dinheiro e tem a receber; net[p] < 0 => p deve. Repasses abatem sem tocar nas despesas. */
+function balance() {
+  const net = { [S.people[0].id]: 0, [S.people[1].id]: 0 };
+  const paidBy = { ...net }, shareOf = { ...net };
+  let future = 0;
+  for (const e of S.expenses) {
+    if (e.type !== 'shared') continue;
+    for (const p of e.parcels) {
+      if (!p.paid) { future += p.cents; continue; }
+      const sh = splitShared(p.cents, e.payer);
+      paidBy[e.payer] += p.cents;
+      for (const id in sh) shareOf[id] += sh[id];
+    }
+  }
+  for (const id in net) net[id] = paidBy[id] - shareOf[id];
+  for (const t of S.transfers) { net[t.from] += t.cents; net[t.to] -= t.cents; }
+  const [a, b] = S.people;
+  const owes = net[a.id] > 0 ? { from: b.id, to: a.id, cents: net[a.id] } : net[b.id] > 0 ? { from: a.id, to: b.id, cents: net[b.id] } : null;
+  return { net, paidBy, shareOf, owes, future };
+}
+function monthSpend(month) {
+  const out = {}; S.people.forEach(p => out[p.id] = { individual: 0, shared: 0 });
+  for (const e of S.expenses) for (const p of e.parcels) {
+    if (monthOf(p.due) !== month) continue;
+    if (e.type === 'individual') out[e.owner].individual += p.cents;
+    else { const sh = splitShared(p.cents, e.payer); for (const id in sh) out[id].shared += sh[id]; }
+  }
+  return out;
+}
+function studentStatus(st, month) {
+  const pay = S.payments.find(p => p.studentId === st.id && p.month === month);
+  if (pay) return { key: 'pago', label: 'Pago', pay };
+  const due = `${month}-${pad(Math.min(st.dueDay, new Date(+month.slice(0, 4), +month.slice(5), 0).getDate()))}`;
+  return { key: due < todayStr() ? 'atrasado' : 'pendente', label: due < todayStr() ? 'Atrasado' : 'Pendente', due };
+}
+const dueFor = (st, month) => `${month}-${pad(Math.min(st.dueDay, new Date(+month.slice(0, 4), +month.slice(5), 0).getDate()))}`;
+
+/* ---------- UI base ---------- */
+const TABS = [['inicio', 'Início'], ['despesas', 'Despesas'], ['acerto', 'Acerto'], ['carteira', 'Carteira'], ['alunos', 'Alunos'], ['config', 'Configurações']];
+function toast(msg) {
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; t.setAttribute('role', 'status');
+  document.body.appendChild(t); setTimeout(() => t.remove(), 2400);
+}
+function openModal(title, bodyHtml, { onSubmit, submitLabel = 'Salvar', cancelLabel = 'Cancelar', hideSubmit = false } = {}) {
+  const root = $('#modalRoot');
+  root.innerHTML = `<div class="overlay" data-close-overlay><form class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}" novalidate>
+    <h3>${esc(title)}</h3><div id="modalBody">${bodyHtml}</div><div class="error" id="modalErr" hidden></div>
+    <div class="foot"><button type="button" class="btn ghost" data-close>${esc(cancelLabel)}</button>${hideSubmit ? '' : `<button type="submit" class="btn">${esc(submitLabel)}</button>`}</div></form></div>`;
+  const form = $('form.modal', root);
+  const close = () => { root.innerHTML = ''; };
+  root.querySelector('[data-close]').onclick = close;
+  root.querySelector('.overlay').addEventListener('mousedown', e => { if (e.target.classList.contains('overlay')) close(); });
+  form.addEventListener('submit', ev => {
+    ev.preventDefault();
+    if (!onSubmit) return close();
+    const err = onSubmit(new FormData(form), form);
+    if (err) { const el = $('#modalErr', root); el.textContent = err; el.hidden = false; }
+    else { close(); save(); render(); }
+  });
+  const first = form.querySelector('input:not([type=radio]):not([type=hidden]),select,textarea'); if (first) first.focus();
+  return { form, close };
+}
+const optPeople = (sel) => S.people.map(p => `<option value="${p.id}" ${p.id === sel ? 'selected' : ''}>${esc(p.name)}</option>`).join('');
+const optList = (arr, sel) => arr.map(x => `<option ${x === sel ? 'selected' : ''}>${esc(x)}</option>`).join('');
+const monthBar = (allowAll) => `<div class="toolbar">
+  <button class="btn ghost sm" data-act="month-prev" aria-label="Mês anterior">‹</button>
+  <input type="month" value="${esc(ui.month)}" data-act="month-set" style="width:auto" aria-label="Mês">
+  <button class="btn ghost sm" data-act="month-next" aria-label="Próximo mês">›</button>
+  ${allowAll ? `<button class="btn ghost sm" data-act="month-all">${ui.month ? 'Todos os meses' : 'Voltar ao mês atual'}</button>` : ''}</div>`;
+
+/* ---------- Início ---------- */
+function viewInicio() {
+  const bal = balance(), sp = monthSpend(ui.month || todayStr().slice(0, 7));
+  const m = ui.month || todayStr().slice(0, 7);
+  const [pa, pb] = S.people;
+  let acerto;
+  if (!S.expenses.some(e => e.type === 'shared') && !S.transfers.length) acerto = `<div class="big">R$ 0,00</div><div class="sub">Nenhuma despesa compartilhada paga ainda.</div>`;
+  else if (!bal.owes) acerto = `<div class="big">Tudo certo</div><div class="sub">Vocês estão quites.</div>`;
+  else acerto = `<div class="big">${brl(bal.owes.cents)}</div><div class="sub"><b>${esc(pname(bal.owes.from))}</b> deve a <b>${esc(pname(bal.owes.to))}</b></div>`;
+  const received = S.wallet.filter(w => w.status === 'recebido' && monthOf(w.date) === m).reduce((s, w) => s + w.cents, 0)
+    + S.payments.filter(p => p.month === m).reduce((s, p) => s + p.cents, 0);
+  const activeSt = S.students.filter(s => s.active);
+  const late = activeSt.filter(s => studentStatus(s, m).key === 'atrasado').length;
+  const upcoming = [];
+  S.expenses.forEach(e => e.parcels.forEach(p => { if (!p.paid) upcoming.push({ e, p }); }));
+  upcoming.sort((x, y) => x.p.due.localeCompare(y.p.due));
+  const up = upcoming.slice(0, 6);
+  return `
+  <div class="view-head"><h2>Início</h2>${monthBar(false)}</div>
+  <div class="grid g2">
+    <div class="card hero"><h3>Acerto entre vocês</h3>${acerto}
+      <div style="margin-top:10px"><button class="btn sm" data-act="goto" data-tab="acerto">Ver acerto e repasses</button></div></div>
+    <div class="card"><h3>Recebido em ${esc(monthLabel(m))}</h3><div class="big">${brl(received)}</div>
+      <div class="sub">${activeSt.length ? `${late} aluno(s) em atraso` : 'Carteira e mensalidades'}</div></div>
+  </div>
+  <div class="section"><h3>Gastos de ${esc(monthLabel(m))} (por vencimento das parcelas)</h3>
+    <div class="grid g2">${[pa, pb].map(p => `<div class="card white"><h3>${esc(p.name)}</h3>
+      <div class="big">${brl(sp[p.id].individual + sp[p.id].shared)}</div>
+      <div class="sub">Individual ${brl(sp[p.id].individual)} · Parte no compartilhado ${brl(sp[p.id].shared)}</div></div>`).join('')}</div></div>
+  <div class="section"><h3>Parcelas em aberto</h3>
+    ${up.length ? `<div class="list">${up.map(({ e, p }) => `<div class="row"><div class="grow"><div class="title">${esc(e.desc)}</div>
+      <div class="sub">Parcela ${p.n}/${e.parcels.length} · vence ${fmtDate(p.due)} · ${esc(pname(e.payer))}</div></div>
+      <span class="badge ${p.due < todayStr() ? 'late' : 'wait'}">${p.due < todayStr() ? 'Vencida' : 'A vencer'}</span><div class="amount">${brl(p.cents)}</div></div>`).join('')}</div>`
+      : `<div class="empty">Sem parcelas em aberto.</div>`}</div>`;
+}
+
+/* ---------- Despesas ---------- */
+function expenseFiltered() {
+  return S.expenses.filter(e => (!ui.month || monthOf(e.date) === ui.month)
+    && (ui.expType === 'todas' || e.type === ui.expType)
+    && (ui.expPerson === 'todas' || e.payer === ui.expPerson || e.owner === ui.expPerson))
+    .sort((a, b) => b.date.localeCompare(a.date));
+}
+function viewDespesas() {
+  const list = expenseFiltered();
+  const total = list.reduce((s, e) => s + e.totalCents, 0);
+  return `<div class="view-head"><h2>Despesas</h2><button class="btn" data-act="exp-new">+ Nova despesa</button></div>
+  <div class="toolbar" style="margin-bottom:14px">${monthBar(true)}
+    <select data-act="f-type" style="width:auto" aria-label="Tipo"><option value="todas" ${ui.expType === 'todas' ? 'selected' : ''}>Todos os tipos</option><option value="individual" ${ui.expType === 'individual' ? 'selected' : ''}>Individuais</option><option value="shared" ${ui.expType === 'shared' ? 'selected' : ''}>Compartilhadas</option></select>
+    <select data-act="f-person" style="width:auto" aria-label="Pessoa"><option value="todas">Todas as pessoas</option>${S.people.map(p => `<option value="${p.id}" ${ui.expPerson === p.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></div>
+  <div class="sub" style="margin-bottom:10px">${list.length} lançamento(s) · total ${brl(total)}</div>
+  ${list.length ? `<div class="list">${list.map(expRow).join('')}</div>` : `<div class="empty">Nenhuma despesa neste filtro.<br><button class="btn" style="margin-top:12px" data-act="exp-new">Registrar a primeira despesa</button></div>`}`;
+}
+function expRow(e) {
+  const paid = e.parcels.filter(p => p.paid).length, n = e.parcels.length;
+  const who = e.type === 'individual' ? `de ${esc(pname(e.owner))}` : `pago por ${esc(pname(e.payer))} · 50/50`;
+  return `<div class="row"><div class="grow"><div class="title">${esc(e.desc)}</div>
+    <div class="sub">${fmtDate(e.date)} · ${esc(e.category)} · ${esc(e.method)} · ${who}</div>
+    <div style="margin-top:4px"><span class="badge ${e.type === 'shared' ? 'shared' : ''}">${e.type === 'shared' ? 'Compartilhada' : 'Individual'}</span>
+    ${n > 1 ? ` <span class="badge">${paid}/${n} parcelas pagas</span>` : (paid ? ' <span class="badge ok">Paga</span>' : ' <span class="badge wait">Em aberto</span>')}</div></div>
+    <div class="amount">${brl(e.totalCents)}</div>
+    <div class="actions"><button class="btn ghost sm" data-act="exp-parcels" data-id="${e.id}">Parcelas</button>
+    <button class="btn ghost sm" data-act="exp-edit" data-id="${e.id}">Editar</button>
+    <button class="btn danger sm" data-act="exp-del" data-id="${e.id}">Excluir</button></div></div>`;
+}
+function expenseForm(e) {
+  const isEdit = !!e, d = e || { desc: '', totalCents: 0, date: todayStr(), category: S.categories[0], type: 'shared', payer: S.people[0].id, owner: S.people[0].id, method: 'Cartão de crédito', parcels: [{}], notes: '' };
+  const html = `
+    <div class="field"><label for="f_desc">Descrição</label><input type="text" id="f_desc" name="desc" value="${esc(d.desc)}" maxlength="120" required></div>
+    <div class="two"><div class="field"><label for="f_total">Valor total (R$)</label><input type="text" inputmode="decimal" id="f_total" name="total" value="${d.totalCents ? moneyInput(d.totalCents) : ''}" placeholder="0,00"></div>
+    <div class="field"><label for="f_date">Data da compra</label><input type="date" id="f_date" name="date" value="${d.date}"></div></div>
+    <div class="field"><label>Tipo</label><div class="seg"><label><input type="radio" name="type" value="shared" ${d.type === 'shared' ? 'checked' : ''}>Compartilhada (50/50)</label><label><input type="radio" name="type" value="individual" ${d.type === 'individual' ? 'checked' : ''}>Individual</label></div></div>
+    <div class="two"><div class="field"><label for="f_payer">Quem pagou</label><select id="f_payer" name="payer">${optPeople(d.payer)}</select></div>
+    <div class="field" id="ownerBox"><label for="f_owner">De quem é a despesa</label><select id="f_owner" name="owner">${optPeople(d.owner)}</select></div></div>
+    <div class="two"><div class="field"><label for="f_method">Meio de pagamento</label><select id="f_method" name="method">${optList(METHODS, d.method)}</select></div>
+    <div class="field"><label for="f_cat">Categoria</label><select id="f_cat" name="category">${optList(S.categories, d.category)}</select></div></div>
+    <div class="two"><div class="field"><label for="f_n">Nº de parcelas</label><input type="number" id="f_n" name="n" min="1" max="48" value="${d.parcels.length}"></div>
+    ${isEdit ? '<div></div>' : `<div class="field"><label>&nbsp;</label><label class="check"><input type="checkbox" name="paidFirst" checked> Primeira parcela já paga</label></div>`}</div>
+    ${isEdit ? `<div class="hint">Ao mudar valor, data ou nº de parcelas, as parcelas são recalculadas e o status "paga" é mantido pelo número da parcela.</div>` : ''}
+    <div class="field"><label for="f_notes">Observações</label><textarea id="f_notes" name="notes" rows="2" maxlength="300">${esc(d.notes || '')}</textarea></div>`;
+  const { form } = openModal(isEdit ? 'Editar despesa' : 'Nova despesa', html, {
+    onSubmit: fd => {
+      const desc = String(fd.get('desc')).trim(), cents = parseMoney(fd.get('total')), date = String(fd.get('date')), n = parseInt(fd.get('n'), 10);
+      if (!desc) return 'Informe a descrição.';
+      if (!cents || cents <= 0) return 'Informe um valor maior que zero.';
+      if (!validDate(date)) return 'Informe uma data válida.';
+      if (!Number.isInteger(n) || n < 1 || n > 48) return 'Número de parcelas deve ser de 1 a 48.';
+      const type = fd.get('type'), payer = fd.get('payer');
+      const owner = type === 'individual' ? fd.get('owner') : payer;
+      let paidMap = {};
+      if (isEdit) e.parcels.forEach(p => paidMap[p.n] = p);
+      else if (fd.get('paidFirst')) paidMap[1] = { paid: true, paidDate: date };
+      const obj = { id: isEdit ? e.id : uid(), desc, totalCents: cents, date, category: fd.get('category'), type, payer, owner, method: fd.get('method'), notes: String(fd.get('notes') || '').trim(), parcels: buildParcels(cents, n, date, paidMap) };
+      if (isEdit) S.expenses[S.expenses.indexOf(e)] = obj; else S.expenses.push(obj);
+      return null;
+    }
+  });
+  const sync = () => { $('#ownerBox', form).style.display = form.elements.type.value === 'individual' ? '' : 'none'; };
+  form.addEventListener('change', sync); sync();
+}
+function parcelsModal(id) {
+  const e = S.expenses.find(x => x.id === id); if (!e) return;
+  const html = `<div class="sub" style="margin-bottom:10px">${esc(e.desc)} · ${brl(e.totalCents)} em ${e.parcels.length}x · pagas por ${esc(pname(e.payer))}</div>
+    <div class="list">${e.parcels.map(p => `<label class="row check" style="cursor:pointer"><input type="checkbox" data-parcel="${p.n}" ${p.paid ? 'checked' : ''}>
+    <span class="grow">Parcela ${p.n}/${e.parcels.length} · vence ${fmtDate(p.due)}${p.paid && p.paidDate ? ` · paga em ${fmtDate(p.paidDate)}` : ''}</span><b>${brl(p.cents)}</b></label>`).join('')}</div>
+    ${e.type === 'shared' ? '<div class="hint" style="margin-top:8px">Só parcelas pagas entram no acerto entre vocês.</div>' : ''}`;
+  const { form } = openModal('Parcelas', html, { hideSubmit: true, cancelLabel: 'Fechar' });
+  form.addEventListener('change', ev => {
+    const n = +ev.target.dataset.parcel; if (!n) return;
+    const p = e.parcels.find(x => x.n === n); p.paid = ev.target.checked; p.paidDate = p.paid ? todayStr() : '';
+    save(); render(); parcelsModal(id);
+  });
+}
+
+/* ---------- Acerto ---------- */
+function viewAcerto() {
+  const b = balance(), [pa, pb] = S.people;
+  const head = !b.owes
+    ? `<div class="big">${S.transfers.length || S.expenses.some(e => e.type === 'shared' && e.parcels.some(p => p.paid)) ? 'Quites' : 'R$ 0,00'}</div><div class="sub">Não há pendência entre vocês.</div>`
+    : `<div class="big">${brl(b.owes.cents)}</div><div class="sub"><b>${esc(pname(b.owes.from))}</b> deve a <b>${esc(pname(b.owes.to))}</b> para equilibrar as contas.</div>`;
+  const trs = [...S.transfers].sort((x, y) => y.date.localeCompare(x.date));
+  return `<div class="view-head"><h2>Acerto e repasses</h2><button class="btn" data-act="tr-new">+ Registrar repasse</button></div>
+  <div class="card hero">${head}
+    ${b.owes ? `<div style="margin-top:10px"><button class="btn sm" data-act="tr-suggest">Registrar repasse de ${brl(b.owes.cents)}</button></div>` : ''}</div>
+  <div class="section"><h3>Como chegamos nesse número</h3>
+    <div class="grid g2">${[pa, pb].map(p => `<div class="card white"><h3>${esc(p.name)}</h3>
+      <div class="sub">Pagou no compartilhado: <b>${brl(b.paidBy[p.id])}</b></div>
+      <div class="sub">Parte dele(a) (50/50): <b>${brl(b.shareOf[p.id])}</b></div>
+      <div class="sub">Repasses enviados: <b>${brl(S.transfers.filter(t => t.from === p.id).reduce((s, t) => s + t.cents, 0))}</b> · recebidos: <b>${brl(S.transfers.filter(t => t.to === p.id).reduce((s, t) => s + t.cents, 0))}</b></div>
+      <div style="margin-top:6px"><b>Saldo: ${b.net[p.id] >= 0 ? 'a receber ' : 'a pagar '}${brl(Math.abs(b.net[p.id]))}</b></div></div>`).join('')}</div>
+    <div class="note" style="margin-top:12px">Só contam as <b>parcelas já pagas</b> de despesas <b>compartilhadas</b>. O centavo ímpar de um rateio fica com quem pagou. Ainda em aberto no compartilhado: ${brl(b.future)}.</div></div>
+  <div class="section"><h3>Histórico de repasses</h3>
+    ${trs.length ? `<div class="list">${trs.map(t => `<div class="row"><div class="grow"><div class="title">${esc(pname(t.from))} → ${esc(pname(t.to))}</div><div class="sub">${fmtDate(t.date)}${t.note ? ' · ' + esc(t.note) : ''}</div></div>
+      <div class="amount">${brl(t.cents)}</div><div class="actions"><button class="btn danger sm" data-act="tr-del" data-id="${t.id}">Excluir</button></div></div>`).join('')}</div>`
+      : `<div class="empty">Nenhum repasse registrado. Repasses abatem a pendência sem alterar as despesas.</div>`}</div>`;
+}
+function transferForm(prefill = {}) {
+  const from = prefill.from || S.people[0].id, to = prefill.to || other(from);
+  const html = `<div class="two"><div class="field"><label for="t_from">Quem enviou</label><select id="t_from" name="from">${optPeople(from)}</select></div>
+    <div class="field"><label for="t_to">Quem recebeu</label><select id="t_to" name="to">${optPeople(to)}</select></div></div>
+    <div class="two"><div class="field"><label for="t_val">Valor (R$)</label><input type="text" inputmode="decimal" id="t_val" name="val" value="${prefill.cents ? moneyInput(prefill.cents) : ''}" placeholder="0,00"></div>
+    <div class="field"><label for="t_date">Data</label><input type="date" id="t_date" name="date" value="${todayStr()}"></div></div>
+    <div class="field"><label for="t_note">Observação (opcional)</label><input type="text" id="t_note" name="note" maxlength="120"></div>
+    <div class="hint">Repasses parciais são aceitos; o saldo restante é recalculado.</div>`;
+  openModal('Registrar repasse', html, { onSubmit: fd => {
+    const cents = parseMoney(fd.get('val')), date = String(fd.get('date'));
+    if (fd.get('from') === fd.get('to')) return 'Quem enviou e quem recebeu devem ser pessoas diferentes.';
+    if (!cents || cents <= 0) return 'Informe um valor maior que zero.';
+    if (!validDate(date)) return 'Informe uma data válida.';
+    S.transfers.push({ id: uid(), from: fd.get('from'), to: fd.get('to'), cents, date, note: String(fd.get('note') || '').trim() });
+    return null;
+  } });
+}
+
+/* ---------- Carteira ---------- */
+const WSTATUS = { recebido: ['Recebido', 'ok'], pendente: ['Pendente', 'wait'], previsto: ['Previsto', ''] };
+function walletStatus(w) { return w.status !== 'recebido' && w.date < todayStr() ? ['Atrasado', 'late'] : WSTATUS[w.status]; }
+function viewCarteira() {
+  const m = ui.month || todayStr().slice(0, 7);
+  const items = S.wallet.filter(w => monthOf(w.date) === m).sort((a, b) => b.date.localeCompare(a.date));
+  const rec = items.filter(w => w.status === 'recebido').reduce((s, w) => s + w.cents, 0);
+  const open = items.filter(w => w.status !== 'recebido').reduce((s, w) => s + w.cents, 0);
+  const tuition = S.payments.filter(p => p.month === m).reduce((s, p) => s + p.cents, 0);
+  return `<div class="view-head"><h2>Carteira</h2><button class="btn" data-act="w-new">+ Novo recebimento</button></div>
+  <div style="margin-bottom:14px">${monthBar(false)}</div>
+  <div class="grid g3">
+    <div class="card hero"><h3>Total recebido</h3><div class="big">${brl(rec + tuition)}</div><div class="sub">Lançamentos + mensalidades</div></div>
+    <div class="card"><h3>A receber</h3><div class="big">${brl(open)}</div><div class="sub">Previsto e pendente</div></div>
+    <div class="card"><h3>Mensalidades recebidas</h3><div class="big">${brl(tuition)}</div><div class="sub">Vindo do Painel de Alunos</div></div>
+  </div>
+  <div class="section"><h3>Lançamentos de ${esc(monthLabel(m))}</h3>
+  ${items.length ? `<div class="list">${items.map(w => { const [l, c] = walletStatus(w); return `<div class="row"><div class="grow"><div class="title">${esc(w.desc)}</div>
+    <div class="sub">${fmtDate(w.date)} · ${w.kind === 'ganho' ? 'Outro ganho' : 'Recebimento'}${w.note ? ' · ' + esc(w.note) : ''}</div></div>
+    <span class="badge ${c}">${l}</span><div class="amount">${brl(w.cents)}</div>
+    <div class="actions">${w.status !== 'recebido' ? `<button class="btn sm" data-act="w-receive" data-id="${w.id}">Marcar recebido</button>` : ''}
+    <button class="btn ghost sm" data-act="w-edit" data-id="${w.id}">Editar</button><button class="btn danger sm" data-act="w-del" data-id="${w.id}">Excluir</button></div></div>`; }).join('')}</div>`
+  : `<div class="empty">Nada lançado neste mês.</div>`}</div>`;
+}
+function walletForm(w) {
+  const d = w || { desc: '', cents: 0, date: todayStr(), kind: 'recebimento', status: 'recebido', note: '' };
+  const html = `<div class="field"><label for="w_desc">Descrição</label><input type="text" id="w_desc" name="desc" value="${esc(d.desc)}" maxlength="120"></div>
+    <div class="two"><div class="field"><label for="w_val">Valor (R$)</label><input type="text" inputmode="decimal" id="w_val" name="val" value="${d.cents ? moneyInput(d.cents) : ''}" placeholder="0,00"></div>
+    <div class="field"><label for="w_date">Data</label><input type="date" id="w_date" name="date" value="${d.date}"></div></div>
+    <div class="two"><div class="field"><label for="w_kind">Tipo</label><select id="w_kind" name="kind"><option value="recebimento" ${d.kind === 'recebimento' ? 'selected' : ''}>Recebimento</option><option value="ganho" ${d.kind === 'ganho' ? 'selected' : ''}>Outro ganho</option></select></div>
+    <div class="field"><label for="w_status">Situação</label><select id="w_status" name="status"><option value="recebido" ${d.status === 'recebido' ? 'selected' : ''}>Recebido</option><option value="pendente" ${d.status === 'pendente' ? 'selected' : ''}>Pendente</option><option value="previsto" ${d.status === 'previsto' ? 'selected' : ''}>Previsto</option></select></div></div>
+    <div class="field"><label for="w_note">Observação</label><input type="text" id="w_note" name="note" value="${esc(d.note || '')}" maxlength="160"></div>`;
+  openModal(w ? 'Editar lançamento' : 'Novo recebimento', html, { onSubmit: fd => {
+    const desc = String(fd.get('desc')).trim(), cents = parseMoney(fd.get('val')), date = String(fd.get('date'));
+    if (!desc) return 'Informe a descrição.';
+    if (!cents || cents <= 0) return 'Informe um valor maior que zero.';
+    if (!validDate(date)) return 'Informe uma data válida.';
+    const obj = { id: w ? w.id : uid(), desc, cents, date, kind: fd.get('kind'), status: fd.get('status'), note: String(fd.get('note') || '').trim() };
+    if (w) S.wallet[S.wallet.indexOf(w)] = obj; else S.wallet.push(obj);
+    return null;
+  } });
+}
+
+/* ---------- Alunos ---------- */
+function waLink(st, month) {
+  let ph = String(st.phone || '').replace(/\D/g, ''); if (!ph) return '';
+  if (ph.length <= 11) ph = '55' + ph;
+  const s = studentStatus(st, month), first = st.name.trim().split(/\s+/)[0];
+  const txt = s.key === 'pago'
+    ? `Olá, ${first}! Recebi o pagamento da mensalidade de ${MESES[+month.slice(5) - 1]}. Muito obrigado(a)!`
+    : `Olá, ${first}! Tudo bem? Passando para lembrar da mensalidade de ${MESES[+month.slice(5) - 1]} (${brl(st.feeCents)}), com vencimento em ${fmtDate(dueFor(st, month))}. Qualquer dúvida, é só me chamar!`;
+  return `https://wa.me/${ph}?text=${encodeURIComponent(txt)}`;
+}
+function viewAlunos() {
+  const m = ui.month || todayStr().slice(0, 7);
+  const all = S.students.filter(s => ui.showInactive || s.active).sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+  const act = S.students.filter(s => s.active);
+  const expected = act.reduce((s, st) => s + st.feeCents, 0);
+  const received = S.payments.filter(p => p.month === m).reduce((s, p) => s + p.cents, 0);
+  const lateN = act.filter(s => studentStatus(s, m).key === 'atrasado').length;
+  const rows = all.map(st => {
+    const s = studentStatus(st, m), link = waLink(st, m);
+    const cls = s.key === 'pago' ? 'ok' : s.key === 'atrasado' ? 'late' : 'wait';
+    return `<tr class="${st.active ? '' : 'dim'}"><td><b>${esc(st.name)}</b>${st.active ? '' : ' <span class="badge">inativo</span>'}</td><td>${esc(st.phone || '—')}</td>
+      <td class="num">${brl(st.feeCents)}</td><td>dia ${st.dueDay}</td>
+      <td><span class="badge ${cls}">${s.label}</span>${s.pay ? ` <span class="sub">${brl(s.pay.cents)} em ${fmtDate(s.pay.date)}</span>` : ''}</td>
+      <td><div class="acts">${s.key === 'pago' ? `<button class="btn ghost sm" data-act="st-undo" data-id="${st.id}">Desfazer</button>` : `<button class="btn sm" data-act="st-pay" data-id="${st.id}">Receber</button>`}
+      ${link ? `<a class="btn wa sm" href="${link}" target="_blank" rel="noopener">Enviar mensagem</a>` : `<button class="btn wa sm" disabled title="Cadastre o WhatsApp do aluno">Enviar mensagem</button>`}
+      <button class="btn ghost sm" data-act="st-edit" data-id="${st.id}">Editar</button><button class="btn danger sm" data-act="st-del" data-id="${st.id}">Excluir</button></div></td></tr>`;
+  }).join('');
+  return `<div class="view-head"><h2>Painel de Alunos</h2><button class="btn" data-act="st-new">+ Novo aluno</button></div>
+  <div class="toolbar" style="margin-bottom:14px">${monthBar(false)}<label class="check" style="margin:0"><input type="checkbox" data-act="st-inactive" ${ui.showInactive ? 'checked' : ''}> Mostrar inativos</label></div>
+  <div class="grid g3" style="margin-bottom:16px">
+    <div class="card"><h3>Esperado no mês</h3><div class="big">${brl(expected)}</div></div>
+    <div class="card hero"><h3>Recebido</h3><div class="big">${brl(received)}</div></div>
+    <div class="card"><h3>Em atraso</h3><div class="big ${lateN ? 'neg' : ''}">${lateN}</div><div class="sub">aluno(s)</div></div></div>
+  ${all.length ? `<div class="sheet-wrap"><table class="sheet"><thead><tr><th>Aluno</th><th>WhatsApp</th><th class="num">Mensalidade</th><th>Vence</th><th>Situação</th><th>Ações</th></tr></thead><tbody>${rows}</tbody></table></div>`
+  : `<div class="empty">Nenhum aluno cadastrado.<br><button class="btn" style="margin-top:12px" data-act="st-new">Cadastrar o primeiro aluno</button></div>`}`;
+}
+function studentForm(st) {
+  const d = st || { name: '', phone: '', feeCents: 0, dueDay: 10, note: '', active: true };
+  const html = `<div class="field"><label for="s_name">Nome</label><input type="text" id="s_name" name="name" value="${esc(d.name)}" maxlength="80"></div>
+    <div class="field"><label for="s_phone">WhatsApp (com DDD)</label><input type="tel" id="s_phone" name="phone" value="${esc(d.phone)}" placeholder="21 99999-9999"></div>
+    <div class="two"><div class="field"><label for="s_fee">Mensalidade (R$)</label><input type="text" inputmode="decimal" id="s_fee" name="fee" value="${d.feeCents ? moneyInput(d.feeCents) : ''}" placeholder="0,00"></div>
+    <div class="field"><label for="s_day">Dia do vencimento</label><input type="number" id="s_day" name="day" min="1" max="31" value="${d.dueDay}"></div></div>
+    <div class="field"><label for="s_note">Observações</label><input type="text" id="s_note" name="note" value="${esc(d.note || '')}" maxlength="160"></div>
+    <label class="check"><input type="checkbox" name="active" ${d.active ? 'checked' : ''}> Aluno ativo</label>`;
+  openModal(st ? 'Editar aluno' : 'Novo aluno', html, { onSubmit: fd => {
+    const name = String(fd.get('name')).trim(), fee = parseMoney(fd.get('fee')), day = parseInt(fd.get('day'), 10), phone = String(fd.get('phone')).trim();
+    if (!name) return 'Informe o nome.';
+    if (fee === null || fee < 0) return 'Informe o valor da mensalidade.';
+    if (!Number.isInteger(day) || day < 1 || day > 31) return 'Dia do vencimento deve ser de 1 a 31.';
+    if (phone && phone.replace(/\D/g, '').length < 10) return 'WhatsApp deve ter DDD e número.';
+    const obj = { id: st ? st.id : uid(), name, phone, feeCents: fee, dueDay: day, note: String(fd.get('note') || '').trim(), active: !!fd.get('active') };
+    if (st) S.students[S.students.indexOf(st)] = obj; else S.students.push(obj);
+    return null;
+  } });
+}
+function payForm(st) {
+  const m = ui.month || todayStr().slice(0, 7);
+  openModal(`Receber — ${st.name}`, `<div class="sub" style="margin-bottom:10px">Mensalidade de ${esc(monthLabel(m))}</div>
+    <div class="two"><div class="field"><label for="p_val">Valor recebido (R$)</label><input type="text" inputmode="decimal" id="p_val" name="val" value="${moneyInput(st.feeCents)}"></div>
+    <div class="field"><label for="p_date">Data</label><input type="date" id="p_date" name="date" value="${todayStr()}"></div></div>
+    <div class="field"><label for="p_m">Meio</label><select id="p_m" name="method"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Outro</option></select></div>`,
+    { submitLabel: 'Confirmar recebimento', onSubmit: fd => {
+      const cents = parseMoney(fd.get('val')), date = String(fd.get('date'));
+      if (!cents || cents <= 0) return 'Informe um valor maior que zero.';
+      if (!validDate(date)) return 'Informe uma data válida.';
+      if (S.payments.some(p => p.studentId === st.id && p.month === m)) return 'Este mês já está pago.';
+      S.payments.push({ id: uid(), studentId: st.id, month: m, cents, date, method: fd.get('method') });
+      return null;
+    } });
+}
+
+/* ---------- Configurações ---------- */
+function viewConfig() {
+  return `<div class="view-head"><h2>Configurações</h2></div>
+  ${storageOk ? '' : '<div class="banner">Este navegador bloqueou o armazenamento: os dados não serão salvos. Exporte um backup antes de sair.</div>'}
+  <div class="card white"><h3>Participantes</h3><form data-form="people"><div class="two">
+    <div class="field"><label for="n_a">Pessoa 1</label><input type="text" id="n_a" name="a" value="${esc(S.people[0].name)}" maxlength="40"></div>
+    <div class="field"><label for="n_b">Pessoa 2</label><input type="text" id="n_b" name="b" value="${esc(S.people[1].name)}" maxlength="40"></div></div>
+    <button class="btn sm" type="submit">Salvar nomes</button></form></div>
+  <div class="card white section" style="margin-top:14px"><h3>Categorias de despesa</h3><form data-form="cats">
+    <div class="field"><textarea name="cats" rows="3" aria-label="Categorias">${esc(S.categories.join(', '))}</textarea><div class="hint">Separe por vírgula. Despesas já lançadas mantêm a categoria que tinham.</div></div>
+    <button class="btn sm" type="submit">Salvar categorias</button></form></div>
+  <div class="card white section" style="margin-top:14px"><h3>Seus dados</h3>
+    <p class="sub" style="margin-top:0">Os dados ficam salvos <b>neste navegador</b>. A sincronização entre dois celulares ainda não existe: use o backup para levar os dados de um aparelho para outro.</p>
+    <div class="toolbar"><button class="btn" data-act="export">Exportar backup (.json)</button>
+    <label class="btn ghost" style="margin:0;cursor:pointer">Importar backup<input type="file" accept="application/json,.json" data-act="import" hidden></label>
+    <button class="btn danger" data-act="wipe">Apagar tudo</button></div></div>`;
+}
+
+/* ---------- render e eventos ---------- */
+function render() {
+  $('#brandSub').textContent = `${S.people[0].name} & ${S.people[1].name}`;
+  $('#tabs').innerHTML = TABS.map(([k, l]) => `<button data-act="goto" data-tab="${k}" ${ui.tab === k ? 'aria-current="page"' : ''}>${l}</button>`).join('');
+  const v = { inicio: viewInicio, despesas: viewDespesas, acerto: viewAcerto, carteira: viewCarteira, alunos: viewAlunos, config: viewConfig }[ui.tab];
+  $('#app').innerHTML = (storageOk || ui.tab === 'config' ? '' : '<div class="banner">Armazenamento do navegador indisponível: nada será salvo.</div>') + v();
+}
+const find = (arr, id) => arr.find(x => x.id === id);
+document.addEventListener('click', ev => {
+  const el = ev.target.closest('[data-act]'); if (!el || el.tagName === 'INPUT' || el.tagName === 'SELECT') return;
+  const a = el.dataset.act, id = el.dataset.id;
+  const cur = ui.month || todayStr().slice(0, 7);
+  switch (a) {
+    case 'goto': ui.tab = el.dataset.tab; render(); scrollTo(0, 0); break;
+    case 'month-prev': ui.month = shiftMonth(cur, -1); render(); break;
+    case 'month-next': ui.month = shiftMonth(cur, 1); render(); break;
+    case 'month-all': ui.month = ui.month ? '' : todayStr().slice(0, 7); render(); break;
+    case 'exp-new': expenseForm(); break;
+    case 'exp-edit': expenseForm(find(S.expenses, id)); break;
+    case 'exp-parcels': parcelsModal(id); break;
+    case 'exp-del': { const e = find(S.expenses, id); if (e && confirm(`Excluir "${e.desc}" e todas as suas parcelas?`)) { S.expenses = S.expenses.filter(x => x.id !== id); save(); render(); toast('Despesa excluída'); } break; }
+    case 'tr-new': transferForm(); break;
+    case 'tr-suggest': { const b = balance(); if (b.owes) transferForm(b.owes); break; }
+    case 'tr-del': if (confirm('Excluir este repasse? A pendência será recalculada.')) { S.transfers = S.transfers.filter(x => x.id !== id); save(); render(); } break;
+    case 'w-new': walletForm(); break;
+    case 'w-edit': walletForm(find(S.wallet, id)); break;
+    case 'w-receive': { const w = find(S.wallet, id); if (w) { w.status = 'recebido'; save(); render(); toast('Marcado como recebido'); } break; }
+    case 'w-del': if (confirm('Excluir este lançamento?')) { S.wallet = S.wallet.filter(x => x.id !== id); save(); render(); } break;
+    case 'st-new': studentForm(); break;
+    case 'st-edit': studentForm(find(S.students, id)); break;
+    case 'st-pay': payForm(find(S.students, id)); break;
+    case 'st-undo': if (confirm('Desfazer o pagamento deste mês?')) { S.payments = S.payments.filter(p => !(p.studentId === id && p.month === cur)); save(); render(); } break;
+    case 'st-del': { const s = find(S.students, id); if (s && confirm(`Excluir ${s.name} e o histórico de pagamentos dele(a)?`)) { S.students = S.students.filter(x => x.id !== id); S.payments = S.payments.filter(p => p.studentId !== id); save(); render(); } break; }
+    case 'export': {
+      const blob = new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob), a2 = document.createElement('a');
+      a2.href = url; a2.download = `conta-a-dois-backup-${todayStr()}.json`; a2.click(); setTimeout(() => URL.revokeObjectURL(url), 500); break;
+    }
+    case 'wipe': if (confirm('Apagar TODOS os dados deste navegador? Exporte um backup antes.') && confirm('Tem certeza? Isso não pode ser desfeito.')) { S = freshState(); save(); render(); toast('Dados apagados'); } break;
+  }
+});
+document.addEventListener('change', ev => {
+  const el = ev.target, a = el.dataset && el.dataset.act; if (!a) return;
+  if (a === 'month-set') { ui.month = el.value || todayStr().slice(0, 7); render(); }
+  else if (a === 'f-type') { ui.expType = el.value; render(); }
+  else if (a === 'f-person') { ui.expPerson = el.value; render(); }
+  else if (a === 'st-inactive') { ui.showInactive = el.checked; render(); }
+  else if (a === 'import') {
+    const f = el.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      try {
+        const d = JSON.parse(r.result);
+        if (!d || !Array.isArray(d.people) || d.people.length !== 2 || !Array.isArray(d.expenses)) throw new Error('formato');
+        if (!confirm('Importar este backup substitui os dados atuais. Continuar?')) return;
+        S = Object.assign(freshState(), d); save(); render(); toast('Backup importado');
+      } catch (e) { alert('Arquivo inválido: não parece um backup do Conta a Dois.'); }
+    };
+    r.readAsText(f); el.value = '';
+  }
+});
+document.addEventListener('submit', ev => {
+  const f = ev.target.dataset && ev.target.dataset.form; if (!f) return;
+  ev.preventDefault(); const fd = new FormData(ev.target);
+  if (f === 'people') {
+    const a = String(fd.get('a')).trim(), b = String(fd.get('b')).trim();
+    if (!a || !b) return alert('Os dois nomes são obrigatórios.');
+    S.people[0].name = a; S.people[1].name = b; save(); render(); toast('Nomes salvos');
+  } else if (f === 'cats') {
+    const cats = [...new Set(String(fd.get('cats')).split(',').map(s => s.trim()).filter(Boolean))];
+    if (!cats.length) return alert('Mantenha ao menos uma categoria.');
+    S.categories = cats; save(); render(); toast('Categorias salvas');
+  }
+});
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#modalRoot').innerHTML = ''; });
+render();
+</script>
+</body>
+</html>

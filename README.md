@@ -2,13 +2,17 @@
 
 Projeto de organização financeira e gestão compartilhada do cotidiano de duas pessoas.
 
-> **Estado deste repositório:** documentação inicial baseada nas conversas do projeto. O código-fonte original do site ainda não foi recuperado/importado. Funcionalidades descritas como implementadas foram relatadas durante o desenvolvimento, mas precisam ser conferidas no código e na versão publicada.
+> **Estado deste repositório:** documentação do projeto + uma **recriação** do app em `index.html` (arquivo único, abre direto no navegador). O código-fonte original do site publicado não foi recuperado; a recriação segue os docs e **não é cópia** do original. Compare com a versão publicada antes de substituí-la.
 
 **Site registrado nas conversas:** [Conta a Dois](https://conta-a-dois-marcus.nexoraconceito.chatgpt.site)
 
 ## Objetivo
 
 Centralizar o controle financeiro individual e compartilhado, permitindo acompanhar despesas, meios de pagamento, parcelas, responsabilidades, pendências e acertos entre duas pessoas. O projeto também evoluiu para incluir uma carteira de recebimentos e um painel de alunos.
+
+## Como rodar a recriação
+
+Abra `index.html` no navegador. Os dados ficam no `localStorage` do próprio navegador (sem servidor). Use *Configurações → Exportar backup* para levar os dados a outro aparelho. Sincronização entre dois celulares, login, APK e push **não** existem nesta versão.
 
 ## Documentação
 
