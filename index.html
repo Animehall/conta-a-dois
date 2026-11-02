@@ -5,35 +5,70 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Conta a Dois</title>
 <meta name="theme-color" content="#6d3ad6">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#ffffff; --surface:#faf8ff; --lilac:#ede7fb; --lilac-2:#d9ccf7;
-    --purple:#6d3ad6; --purple-dark:#4b229c; --ink:#1f1635; --muted:#675e80;
-    --line:#e6def5; --green:#1c9a4e; --green-dark:#157a3d; --red:#c0354a; --amber:#a66a00;
-    --radius:14px;
+    --bg:#f7f4fd; --card:#ffffff; --surface:#faf8ff; --lilac:#f0eafb; --lilac-2:#d9ccf7;
+    --purple:#6d3ad6; --purple-dark:#3f1f86; --nav-active:#f1eafc; --nav-ink:#7a4cc4;
+    --ink:#241a3d; --muted:#6f6688; --faint:#b3a6c9; --line:#e8e1f5;
+    --green:#1c9a4e; --green-dark:#157a3d; --red:#c0354a; --amber:#a66a00;
+    --radius:14px; --side:260px;
   }
   *{box-sizing:border-box}
   html{font-size:17px}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.45}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.45}
   button,input,select,textarea{font:inherit;color:inherit}
   h1,h2,h3{margin:0;line-height:1.2}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+  svg.ic{flex:none}
 
-  header.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-  .brand{display:flex;align-items:center;gap:10px;padding:14px 0 6px}
-  .brand svg{flex:none}
-  .brand h1{font-size:1.35rem;color:var(--purple-dark);letter-spacing:-.01em}
-  .brand small{color:var(--muted);display:block;font-size:.8rem}
-  nav.tabs{display:flex;gap:6px;overflow-x:auto;padding:6px 0 10px;scrollbar-width:none}
-  nav.tabs::-webkit-scrollbar{display:none}
-  nav.tabs button{flex:none;border:1px solid var(--line);background:#fff;color:var(--muted);padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:600;font-size:.92rem}
-  nav.tabs button[aria-current="page"]{background:var(--purple);border-color:var(--purple);color:#fff}
+  /* ---- topo: seletor de espaço ---- */
+  #stickytop{position:sticky;top:0;z-index:30}
+  header.top{background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:12px 24px;overflow-x:auto;scrollbar-width:none}
+  header.top::-webkit-scrollbar{display:none}
+  .burger{display:none;flex:none;border:1px solid var(--line);background:#fff;border-radius:10px;width:42px;height:42px;cursor:pointer;color:var(--purple-dark);align-items:center;justify-content:center}
+  .pill{flex:none;display:inline-flex;align-items:center;gap:8px;border:1px solid transparent;background:transparent;color:var(--muted);padding:10px 16px;border-radius:12px;cursor:pointer;font-weight:500;white-space:nowrap}
+  .pill:hover{background:var(--lilac)}
+  .pill[aria-pressed="true"]{background:var(--nav-active);border-color:var(--lilac-2);color:var(--purple-dark);font-weight:700}
+  .spacebanner{background:var(--lilac);color:var(--purple-dark);padding:10px 24px;font-size:.92rem;display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
+  .spacebanner span{color:var(--muted)}
 
-  main{padding:20px 0 80px}
+  /* ---- layout com sidebar ---- */
+  .body{display:grid;grid-template-columns:var(--side) 1fr;align-items:stretch}
+  aside.side{background:#fff;border-right:1px solid var(--line);padding:22px 20px 18px;display:flex;flex-direction:column;position:sticky;top:var(--stickyH,115px);align-self:start;height:calc(100vh - var(--stickyH,115px));overflow-y:auto}
+  .logo{display:flex;align-items:center;gap:12px;margin-bottom:26px}
+  .logo .mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#7a46e6,#5a25c2);display:grid;place-items:center;color:#fff;box-shadow:0 4px 10px rgba(109,58,214,.3)}
+  .logo .word{font-size:1.55rem;font-weight:700;color:#2a1660;letter-spacing:-.03em}
+  .logo .word i{font-style:normal;font-weight:400;color:#6f5aa8;margin:0 .22em}
+  .logo .word b{color:var(--purple);margin-left:1px}
+  .navlabel{font-size:.72rem;letter-spacing:.14em;color:var(--faint);font-weight:600;margin:0 0 10px 12px;text-transform:uppercase}
+  nav.nav{display:flex;flex-direction:column;gap:4px}
+  nav.nav button{display:flex;align-items:center;gap:14px;border:none;background:transparent;color:var(--muted);padding:12px 14px;border-radius:12px;cursor:pointer;font-weight:500;text-align:left;font-size:1rem}
+  nav.nav button:hover{background:#f8f5fe}
+  nav.nav button[aria-current="page"]{background:var(--nav-active);color:var(--nav-ink);font-weight:700}
+  .me{margin-top:auto;border-top:1px solid var(--line);padding-top:16px;display:flex;align-items:center;gap:12px}
+  .me .av{width:36px;height:36px;border-radius:50%;background:var(--lilac);color:var(--purple);display:grid;place-items:center;font-weight:700}
+  .me b{display:block;font-size:.95rem}
+  .me small{color:var(--muted);font-size:.8rem}
+  main.content{padding:26px 28px 80px;min-width:0;max-width:1100px;width:100%}
+  .scrim{display:none}
+
+  @media(max-width:900px){
+    .burger{display:inline-flex}
+    header.top{padding:10px 14px}
+    .spacebanner{padding:10px 16px}
+    .body{grid-template-columns:1fr}
+    aside.side{position:fixed;z-index:40;left:0;top:0;height:100vh;width:280px;transform:translateX(-105%);transition:transform .2s;box-shadow:0 0 40px rgba(31,22,53,.25)}
+    aside.side.open{transform:none}
+    .scrim.open{display:block;position:fixed;inset:0;background:rgba(31,22,53,.45);z-index:35}
+    main.content{padding:18px 16px 80px}
+  }
+
+  /* ---- conteúdo ---- */
   .view-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
-  .view-head h2{font-size:1.5rem;color:var(--purple-dark)}
+  .view-head h2{font-size:1.6rem;color:var(--purple-dark);letter-spacing:-.02em}
   .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-
   .btn{border:1px solid var(--purple);background:var(--purple);color:#fff;padding:9px 16px;border-radius:10px;cursor:pointer;font-weight:600}
   .btn:hover{background:var(--purple-dark)}
   .btn.ghost{background:#fff;color:var(--purple)}
@@ -45,33 +80,33 @@
   .btn.wa{background:var(--green);border-color:var(--green)}
   .btn.wa:hover{background:var(--green-dark)}
   a.btn{text-decoration:none;display:inline-block}
-
   .grid{display:grid;gap:14px}
   .g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
   .g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
-  .card.white{background:#fff}
-  .card h3{font-size:1rem;color:var(--muted);font-weight:600;margin-bottom:6px}
-  .big{font-size:1.9rem;font-weight:750;letter-spacing:-.02em;color:var(--purple-dark)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  .card h3{font-size:.95rem;color:var(--muted);font-weight:600;margin-bottom:6px}
+  .big{font-size:1.9rem;font-weight:700;letter-spacing:-.02em;color:var(--purple-dark)}
   .big.neg{color:var(--red)}
   .sub{color:var(--muted);font-size:.9rem}
-  .hero{background:linear-gradient(135deg,var(--lilac),#fff);border:1px solid var(--lilac-2)}
+  .hero{background:linear-gradient(135deg,#efe7fc,#fff);border:1px solid var(--lilac-2)}
   .section{margin-top:26px}
   .section>h3{font-size:1.1rem;color:var(--purple-dark);margin-bottom:10px}
-
   .badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.78rem;font-weight:650;background:var(--lilac);color:var(--purple-dark);white-space:nowrap}
   .badge.shared{background:var(--purple);color:#fff}
   .badge.ok{background:#e9f7ee;color:var(--green-dark)}
   .badge.late{background:#fdeef0;color:var(--red)}
   .badge.wait{background:#fff4de;color:var(--amber)}
-
   .list{display:flex;flex-direction:column;gap:10px}
   .row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
   .row .grow{flex:1 1 220px;min-width:0}
   .row .title{font-weight:650;overflow-wrap:anywhere}
-  .row .amount{font-weight:750;font-size:1.1rem;white-space:nowrap}
+  .row .title.done{text-decoration:line-through;color:var(--muted)}
+  .row .amount{font-weight:700;font-size:1.1rem;white-space:nowrap}
   .row .actions{display:flex;gap:6px;flex-wrap:wrap}
   .empty{border:1px dashed var(--lilac-2);border-radius:var(--radius);padding:28px 16px;text-align:center;color:var(--muted);background:var(--surface)}
+  .subtabs{display:flex;gap:6px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+  .subtabs button{border:none;background:none;padding:10px 14px;cursor:pointer;color:var(--muted);font-weight:600;border-bottom:3px solid transparent;margin-bottom:-1px}
+  .subtabs button[aria-current="true"]{color:var(--purple);border-bottom-color:var(--purple)}
 
   .sheet-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
   table.sheet{border-collapse:collapse;width:100%;min-width:980px;font-size:.92rem}
@@ -95,8 +130,7 @@
   .check input{width:auto}
   .hint{font-size:.82rem;color:var(--muted);margin-top:3px}
   .error{color:var(--red);font-weight:600;margin:6px 0}
-
-  .overlay{position:fixed;inset:0;background:rgba(31,22,53,.45);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding:0}
+  .overlay{position:fixed;inset:0;background:rgba(31,22,53,.45);display:flex;align-items:flex-end;justify-content:center;z-index:60}
   .modal{background:#fff;width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:20px}
   .modal h3{font-size:1.25rem;color:var(--purple-dark);margin-bottom:14px}
   .modal .foot{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
@@ -105,21 +139,28 @@
   .banner{background:#fff4de;color:var(--amber);border:1px solid #f1d9a5;padding:10px 14px;border-radius:10px;margin-bottom:14px;font-size:.9rem}
   .note{background:var(--lilac);border-radius:10px;padding:10px 14px;font-size:.9rem;color:var(--purple-dark)}
   .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;z-index:80;font-size:.92rem}
-  .bar{height:10px;background:var(--lilac);border-radius:999px;overflow:hidden}
-  .bar>span{display:block;height:100%;background:var(--purple)}
+
+  /* gráficos simples (Análises) */
+  .hbar{display:grid;grid-template-columns:130px 1fr auto;gap:10px;align-items:center;margin:8px 0;font-size:.92rem}
+  .hbar .lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .track{height:12px;background:var(--lilac);border-radius:999px;overflow:hidden}
+  .track>span{display:block;height:100%;background:var(--purple);border-radius:999px}
+  .cols{display:flex;align-items:flex-end;gap:10px;height:170px;padding-top:8px}
+  .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px;min-width:0}
+  .col .b{width:100%;max-width:56px;background:var(--lilac-2);border-radius:8px 8px 0 0;min-height:2px}
+  .col.cur .b{background:var(--purple)}
+  .col small{color:var(--muted);font-size:.75rem}
+  .col .v{font-size:.72rem;font-weight:600;color:var(--purple-dark);white-space:nowrap}
 </style>
 </head>
 <body>
-<header class="top">
-  <div class="wrap">
-    <div class="brand">
-      <svg width="36" height="28" viewBox="0 0 36 28" aria-hidden="true"><circle cx="13" cy="14" r="11" fill="#6d3ad6"/><circle cx="23" cy="14" r="11" fill="#b79cf0" fill-opacity=".85"/></svg>
-      <div><h1>Conta a Dois</h1><small id="brandSub"></small></div>
-    </div>
-    <nav class="tabs" id="tabs" aria-label="Seções"></nav>
-  </div>
-</header>
-<main class="wrap" id="app"></main>
+<div id="stickytop"><header class="top" id="top"></header>
+<div class="spacebanner" id="spaceBanner"></div></div>
+<div class="body">
+  <aside class="side" id="side" aria-label="Menu"></aside>
+  <main class="content" id="app"></main>
+</div>
+<div class="scrim" id="scrim" data-act="menu-close"></div>
 <div id="modalRoot"></div>
 
 <script>
@@ -127,8 +168,8 @@
 /* =====================================================================
    Conta a Dois — app de finanças de duas pessoas (arquivo único)
    - Valores sempre em CENTAVOS (inteiros). Nunca float.
+   - Dois espaços: PARTICULAR (só do usuário) e CASA (compartilhado, rateio 50/50).
    - Dados no navegador (localStorage). Backup por exportar/importar JSON.
-   - Rateio padrão 50/50 só para despesas "compartilhadas".
    - Repasse NUNCA é despesa: é registro próprio que abate a pendência.
    ===================================================================== */
 
@@ -143,6 +184,7 @@ const monthOf = ds => ds.slice(0, 7);
 const fmtDate = ds => ds ? ds.split('-').reverse().join('/') : '';
 const MESES = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
 const monthLabel = m => { const [y, mo] = m.split('-'); return `${MESES[+mo - 1]} de ${y}`; };
+const shortMonth = m => MESES[+m.slice(5) - 1].slice(0, 3);
 const shiftMonth = (m, k) => { const [y, mo] = m.split('-').map(Number); const d = new Date(y, mo - 1 + k, 1); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}`; };
 const validDate = s => /^\d{4}-\d{2}-\d{2}$/.test(s) && !isNaN(new Date(s + 'T12:00:00'));
 function addMonths(ds, k) {
@@ -165,33 +207,58 @@ function parseMoney(txt) {
 }
 const moneyInput = c => (c / 100).toFixed(2).replace('.', ',');
 
+/* ---------- ícones (traço, estilo lucide) ---------- */
+const P = {
+  home: '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  wallet: '<path d="M19 7V5a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h14a1 1 0 0 1 1 1v3"/><path d="M3 6v12a2 2 0 0 0 2 2h14a1 1 0 0 0 1-1v-3"/><path d="M21 12h-4a2 2 0 0 0 0 4h4z"/>',
+  card: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+  tasks: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3h6v3H9z"/><path d="M9 12h6M9 16h6"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  chart: '<path d="M3 20h18"/><path d="m5 16 4-5 4 3 6-8"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',
+  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c2 .7 3.5 2.3 3.5 5.2"/>',
+  menu: '<path d="M4 6h16M4 12h16M4 18h16"/>'
+};
+const icon = (n, s = 22) => `<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]}</svg>`;
+
 /* ---------- estado e persistência ---------- */
 const KEY = 'conta-a-dois:v1';
 const DEFAULT_CATS = ['Mercado', 'Casa', 'Contas fixas', 'Transporte', 'Lazer', 'Alimentação fora', 'Saúde', 'Outros'];
 const METHODS = ['Cartão de crédito', 'Cartão de débito', 'Pix', 'Dinheiro', 'Outro'];
 const freshState = () => ({
-  v: 1,
+  v: 2,
   people: [{ id: 'a', name: 'Marcus' }, { id: 'b', name: 'Mariana' }],
   categories: [...DEFAULT_CATS],
-  expenses: [], transfers: [], wallet: [], students: [], payments: []
+  expenses: [], transfers: [], wallet: [], students: [], payments: [], tasks: []
 });
 let storageOk = true;
+function migrate(d) {
+  const s = Object.assign(freshState(), d);
+  s.tasks = s.tasks || [];
+  /* v1 não tinha espaços: compartilhadas e despesas da pessoa 2 vão para a Casa; o resto é Particular */
+  s.expenses.forEach(e => { if (!e.space) e.space = (e.type === 'individual' && e.owner === s.people[0].id) ? 'particular' : 'casa'; });
+  s.wallet.forEach(w => { if (!w.space) w.space = 'particular'; });
+  s.v = 2;
+  return s;
+}
 function load() {
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (raw) return Object.assign(freshState(), JSON.parse(raw));
-  } catch (e) { storageOk = false; }
+  try { const raw = localStorage.getItem(KEY); if (raw) return migrate(JSON.parse(raw)); }
+  catch (e) { storageOk = false; }
   return freshState();
 }
 let S = load();
-function save() {
-  try { localStorage.setItem(KEY, JSON.stringify(S)); }
-  catch (e) { storageOk = false; }
-}
-const ui = { tab: 'inicio', month: todayStr().slice(0, 7), expType: 'todas', expPerson: 'todas', showInactive: false };
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { storageOk = false; } }
+
+const ui = { space: 'particular', page: 'visao', cartTab: 'receb', month: todayStr().slice(0, 7), expType: 'todas', expPerson: 'todas', showInactive: false, taskFilter: 'abertas' };
+const me = () => S.people[0];
 const person = id => S.people.find(p => p.id === id) || { id, name: '—' };
 const pname = id => person(id).name;
 const other = id => (S.people[0].id === id ? S.people[1].id : S.people[0].id);
+const isCasa = () => ui.space === 'casa';
+const curMonth = () => ui.month || todayStr().slice(0, 7);
+const inSpace = arr => arr.filter(x => x.space === ui.space);
+const casaLabel = () => `Casa · ${S.people[1].name}`;
 
 /* ---------- regras financeiras ---------- */
 /* Parcelas: valor total dividido de forma determinística; os centavos que sobram vão para as primeiras parcelas. */
@@ -202,19 +269,19 @@ function buildParcels(totalCents, n, dateStr, paidMap = {}) {
     return { n: i + 1, cents: base + (i < rem ? 1 : 0), due: addMonths(dateStr, i), paid: !!(prev && prev.paid), paidDate: prev && prev.paid ? prev.paidDate : '' };
   });
 }
-/* Rateio 50/50 de um valor compartilhado: o centavo ímpar fica com quem pagou (determinístico). */
+/* Rateio 50/50: o centavo ímpar fica com quem pagou (determinístico). */
 function splitShared(cents, payerId) {
   const payerShare = Math.ceil(cents / 2);
   return { [payerId]: payerShare, [other(payerId)]: cents - payerShare };
 }
-/* Saldo de acerto: só conta PARCELAS PAGAS de despesas compartilhadas (fluxo de caixa).
-   net[p] > 0  => p adiantou dinheiro e tem a receber; net[p] < 0 => p deve. Repasses abatem sem tocar nas despesas. */
+/* Saldo de acerto (só CASA): conta PARCELAS PAGAS de despesas compartilhadas (fluxo de caixa).
+   net[p] > 0 => p adiantou dinheiro e tem a receber; net[p] < 0 => p deve. Repasses abatem sem tocar nas despesas. */
 function balance() {
   const net = { [S.people[0].id]: 0, [S.people[1].id]: 0 };
   const paidBy = { ...net }, shareOf = { ...net };
   let future = 0;
   for (const e of S.expenses) {
-    if (e.type !== 'shared') continue;
+    if (e.space !== 'casa' || e.type !== 'shared') continue;
     for (const p of e.parcels) {
       if (!p.paid) { future += p.cents; continue; }
       const sh = splitShared(p.cents, e.payer);
@@ -228,32 +295,50 @@ function balance() {
   const owes = net[a.id] > 0 ? { from: b.id, to: a.id, cents: net[a.id] } : net[b.id] > 0 ? { from: a.id, to: b.id, cents: net[b.id] } : null;
   return { net, paidBy, shareOf, owes, future };
 }
+/* Gasto do mês por vencimento das parcelas, dentro do espaço atual. */
 function monthSpend(month) {
   const out = {}; S.people.forEach(p => out[p.id] = { individual: 0, shared: 0 });
-  for (const e of S.expenses) for (const p of e.parcels) {
+  let total = 0;
+  for (const e of inSpace(S.expenses)) for (const p of e.parcels) {
     if (monthOf(p.due) !== month) continue;
+    total += p.cents;
     if (e.type === 'individual') out[e.owner].individual += p.cents;
     else { const sh = splitShared(p.cents, e.payer); for (const id in sh) out[id].shared += sh[id]; }
   }
-  return out;
+  return { out, total };
 }
+const dueFor = (st, month) => `${month}-${pad(Math.min(st.dueDay, new Date(+month.slice(0, 4), +month.slice(5), 0).getDate()))}`;
 function studentStatus(st, month) {
   const pay = S.payments.find(p => p.studentId === st.id && p.month === month);
   if (pay) return { key: 'pago', label: 'Pago', pay };
-  const due = `${month}-${pad(Math.min(st.dueDay, new Date(+month.slice(0, 4), +month.slice(5), 0).getDate()))}`;
-  return { key: due < todayStr() ? 'atrasado' : 'pendente', label: due < todayStr() ? 'Atrasado' : 'Pendente', due };
+  const late = dueFor(st, month) < todayStr();
+  return { key: late ? 'atrasado' : 'pendente', label: late ? 'Atrasado' : 'Pendente' };
 }
-const dueFor = (st, month) => `${month}-${pad(Math.min(st.dueDay, new Date(+month.slice(0, 4), +month.slice(5), 0).getDate()))}`;
+
+/* ---------- casca: topo, banner, sidebar ---------- */
+const NAV = [['visao', 'Visão geral', 'home'], ['carteira', 'Carteira', 'wallet'], ['despesas', 'Despesas', 'card'], ['tarefas', 'Tarefas', 'tasks'], ['pendencias', 'Pendências', 'clock'], ['analises', 'Análises', 'chart'], ['config', 'Configurações', 'gear']];
+function renderShell() {
+  $('#top').innerHTML = `<button class="burger" data-act="menu-open" aria-label="Abrir menu">${icon('menu')}</button>
+    <button class="pill" data-act="space" data-space="particular" aria-pressed="${!isCasa()}">${icon('user', 20)} Particular</button>
+    <button class="pill" data-act="space" data-space="casa" aria-pressed="${isCasa()}">${icon('users', 20)} ${esc(casaLabel())}</button>`;
+  $('#spaceBanner').innerHTML = isCasa()
+    ? `${icon('users', 18)}<div><b>Espaço da casa.</b> <span>Despesas, tarefas e acerto 50/50 compartilhados com ${esc(S.people[1].name)}.</span></div>`
+    : `${icon('user', 18)}<div><b>Seu espaço particular.</b> <span>Despesas, carteira e tarefas que só você enxerga.</span></div>`;
+  document.documentElement.style.setProperty('--stickyH', $('#stickytop').offsetHeight + 'px');
+  $('#side').innerHTML = `<div class="logo"><div class="mark">${icon('wallet', 24)}</div><div class="word">conta<i>a</i>dois<b>.</b></div></div>
+    <div class="navlabel">${isCasa() ? 'Casa' : 'Meu particular'}</div>
+    <nav class="nav" aria-label="Seções">${NAV.map(([k, l, ic]) => `<button data-act="goto" data-page="${k}" ${ui.page === k ? 'aria-current="page"' : ''}>${icon(ic)} ${l}</button>`).join('')}</nav>
+    <div class="me"><div class="av">${esc(me().name.charAt(0).toUpperCase())}</div><div><b>${esc(me().name)}</b><small>${isCasa() ? 'Com ' + esc(S.people[1].name) : 'Somente você'}</small></div></div>`;
+}
 
 /* ---------- UI base ---------- */
-const TABS = [['inicio', 'Início'], ['despesas', 'Despesas'], ['acerto', 'Acerto'], ['carteira', 'Carteira'], ['alunos', 'Alunos'], ['config', 'Configurações']];
 function toast(msg) {
   const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; t.setAttribute('role', 'status');
   document.body.appendChild(t); setTimeout(() => t.remove(), 2400);
 }
 function openModal(title, bodyHtml, { onSubmit, submitLabel = 'Salvar', cancelLabel = 'Cancelar', hideSubmit = false } = {}) {
   const root = $('#modalRoot');
-  root.innerHTML = `<div class="overlay" data-close-overlay><form class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}" novalidate>
+  root.innerHTML = `<div class="overlay"><form class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}" novalidate>
     <h3>${esc(title)}</h3><div id="modalBody">${bodyHtml}</div><div class="error" id="modalErr" hidden></div>
     <div class="foot"><button type="button" class="btn ghost" data-close>${esc(cancelLabel)}</button>${hideSubmit ? '' : `<button type="submit" class="btn">${esc(submitLabel)}</button>`}</div></form></div>`;
   const form = $('form.modal', root);
@@ -278,45 +363,50 @@ const monthBar = (allowAll) => `<div class="toolbar">
   <button class="btn ghost sm" data-act="month-next" aria-label="Próximo mês">›</button>
   ${allowAll ? `<button class="btn ghost sm" data-act="month-all">${ui.month ? 'Todos os meses' : 'Voltar ao mês atual'}</button>` : ''}</div>`;
 
-/* ---------- Início ---------- */
-function viewInicio() {
-  const bal = balance(), sp = monthSpend(ui.month || todayStr().slice(0, 7));
-  const m = ui.month || todayStr().slice(0, 7);
-  const [pa, pb] = S.people;
-  let acerto;
-  if (!S.expenses.some(e => e.type === 'shared') && !S.transfers.length) acerto = `<div class="big">R$ 0,00</div><div class="sub">Nenhuma despesa compartilhada paga ainda.</div>`;
-  else if (!bal.owes) acerto = `<div class="big">Tudo certo</div><div class="sub">Vocês estão quites.</div>`;
-  else acerto = `<div class="big">${brl(bal.owes.cents)}</div><div class="sub"><b>${esc(pname(bal.owes.from))}</b> deve a <b>${esc(pname(bal.owes.to))}</b></div>`;
-  const received = S.wallet.filter(w => w.status === 'recebido' && monthOf(w.date) === m).reduce((s, w) => s + w.cents, 0)
-    + S.payments.filter(p => p.month === m).reduce((s, p) => s + p.cents, 0);
-  const activeSt = S.students.filter(s => s.active);
-  const late = activeSt.filter(s => studentStatus(s, m).key === 'atrasado').length;
-  const upcoming = [];
-  S.expenses.forEach(e => e.parcels.forEach(p => { if (!p.paid) upcoming.push({ e, p }); }));
-  upcoming.sort((x, y) => x.p.due.localeCompare(y.p.due));
-  const up = upcoming.slice(0, 6);
-  return `
-  <div class="view-head"><h2>Início</h2>${monthBar(false)}</div>
-  <div class="grid g2">
-    <div class="card hero"><h3>Acerto entre vocês</h3>${acerto}
-      <div style="margin-top:10px"><button class="btn sm" data-act="goto" data-tab="acerto">Ver acerto e repasses</button></div></div>
-    <div class="card"><h3>Recebido em ${esc(monthLabel(m))}</h3><div class="big">${brl(received)}</div>
-      <div class="sub">${activeSt.length ? `${late} aluno(s) em atraso` : 'Carteira e mensalidades'}</div></div>
-  </div>
-  <div class="section"><h3>Gastos de ${esc(monthLabel(m))} (por vencimento das parcelas)</h3>
-    <div class="grid g2">${[pa, pb].map(p => `<div class="card white"><h3>${esc(p.name)}</h3>
-      <div class="big">${brl(sp[p.id].individual + sp[p.id].shared)}</div>
-      <div class="sub">Individual ${brl(sp[p.id].individual)} · Parte no compartilhado ${brl(sp[p.id].shared)}</div></div>`).join('')}</div></div>
-  <div class="section"><h3>Parcelas em aberto</h3>
-    ${up.length ? `<div class="list">${up.map(({ e, p }) => `<div class="row"><div class="grow"><div class="title">${esc(e.desc)}</div>
-      <div class="sub">Parcela ${p.n}/${e.parcels.length} · vence ${fmtDate(p.due)} · ${esc(pname(e.payer))}</div></div>
-      <span class="badge ${p.due < todayStr() ? 'late' : 'wait'}">${p.due < todayStr() ? 'Vencida' : 'A vencer'}</span><div class="amount">${brl(p.cents)}</div></div>`).join('')}</div>`
-      : `<div class="empty">Sem parcelas em aberto.</div>`}</div>`;
+/* ---------- Visão geral ---------- */
+function openParcelsList(limit) {
+  const up = [];
+  inSpace(S.expenses).forEach(e => e.parcels.forEach(p => { if (!p.paid) up.push({ e, p }); }));
+  up.sort((x, y) => x.p.due.localeCompare(y.p.due));
+  if (!up.length) return `<div class="empty">Sem parcelas em aberto.</div>`;
+  return `<div class="list">${up.slice(0, limit || 999).map(({ e, p }) => `<div class="row"><div class="grow"><div class="title">${esc(e.desc)}</div>
+    <div class="sub">Parcela ${p.n}/${e.parcels.length} · vence ${fmtDate(p.due)} · ${esc(pname(e.payer))}</div></div>
+    <span class="badge ${p.due < todayStr() ? 'late' : 'wait'}">${p.due < todayStr() ? 'Vencida' : 'A vencer'}</span><div class="amount">${brl(p.cents)}</div>
+    <div class="actions"><button class="btn ghost sm" data-act="exp-parcels" data-id="${e.id}">Parcelas</button></div></div>`).join('')}</div>`;
+}
+function viewVisao() {
+  const m = curMonth(), sp = monthSpend(m), [pa, pb] = S.people;
+  const tasksOpen = inSpace(S.tasks).filter(t => !t.done);
+  const upTasks = [...tasksOpen].sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999')).slice(0, 5);
+  let top;
+  if (isCasa()) {
+    const bal = balance();
+    let acerto;
+    if (!S.expenses.some(e => e.space === 'casa' && e.type === 'shared') && !S.transfers.length) acerto = `<div class="big">R$ 0,00</div><div class="sub">Nenhuma despesa compartilhada paga ainda.</div>`;
+    else if (!bal.owes) acerto = `<div class="big">Tudo certo</div><div class="sub">Vocês estão quites.</div>`;
+    else acerto = `<div class="big">${brl(bal.owes.cents)}</div><div class="sub"><b>${esc(pname(bal.owes.from))}</b> deve a <b>${esc(pname(bal.owes.to))}</b></div>`;
+    top = `<div class="grid g2"><div class="card hero"><h3>Acerto entre vocês</h3>${acerto}
+      <div style="margin-top:10px"><button class="btn sm" data-act="goto" data-page="pendencias">Ver acerto e repasses</button></div></div>
+      <div class="card"><h3>Gasto da casa em ${esc(monthLabel(m))}</h3><div class="big">${brl(sp.total)}</div><div class="sub">${tasksOpen.length} tarefa(s) em aberto</div></div></div>
+      <div class="section"><h3>Quanto cabe a cada um em ${esc(monthLabel(m))}</h3><div class="grid g2">${[pa, pb].map(p => `<div class="card"><h3>${esc(p.name)}</h3>
+        <div class="big">${brl(sp.out[p.id].individual + sp.out[p.id].shared)}</div>
+        <div class="sub">Individual ${brl(sp.out[p.id].individual)} · Parte no compartilhado ${brl(sp.out[p.id].shared)}</div></div>`).join('')}</div></div>`;
+  } else {
+    const rec = inSpace(S.wallet).filter(w => w.status === 'recebido' && monthOf(w.date) === m).reduce((s, w) => s + w.cents, 0)
+      + S.payments.filter(p => p.month === m).reduce((s, p) => s + p.cents, 0);
+    const lateN = S.students.filter(s => s.active && studentStatus(s, m).key === 'atrasado').length;
+    top = `<div class="grid g3"><div class="card hero"><h3>Gastos em ${esc(monthLabel(m))}</h3><div class="big">${brl(sp.total)}</div><div class="sub">Por vencimento das parcelas</div></div>
+      <div class="card"><h3>Recebido no mês</h3><div class="big">${brl(rec)}</div><div class="sub">${lateN ? lateN + ' aluno(s) em atraso' : 'Lançamentos e mensalidades'}</div></div>
+      <div class="card"><h3>Tarefas em aberto</h3><div class="big">${tasksOpen.length}</div><div class="sub"><a href="#" data-act="goto" data-page="tarefas" style="color:var(--purple)">Ver tarefas</a></div></div></div>`;
+  }
+  return `<div class="view-head"><h2>Visão geral</h2>${monthBar(false)}</div>${top}
+  <div class="section"><h3>Parcelas em aberto</h3>${openParcelsList(5)}</div>
+  <div class="section"><h3>Próximas tarefas</h3>${upTasks.length ? `<div class="list">${upTasks.map(taskRow).join('')}</div>` : `<div class="empty">Nenhuma tarefa em aberto.</div>`}</div>`;
 }
 
 /* ---------- Despesas ---------- */
 function expenseFiltered() {
-  return S.expenses.filter(e => (!ui.month || monthOf(e.date) === ui.month)
+  return inSpace(S.expenses).filter(e => (!ui.month || monthOf(e.date) === ui.month)
     && (ui.expType === 'todas' || e.type === ui.expType)
     && (ui.expPerson === 'todas' || e.payer === ui.expPerson || e.owner === ui.expPerson))
     .sort((a, b) => b.date.localeCompare(a.date));
@@ -324,34 +414,37 @@ function expenseFiltered() {
 function viewDespesas() {
   const list = expenseFiltered();
   const total = list.reduce((s, e) => s + e.totalCents, 0);
+  const casaFilters = isCasa() ? `<select data-act="f-type" style="width:auto" aria-label="Tipo"><option value="todas" ${ui.expType === 'todas' ? 'selected' : ''}>Todos os tipos</option><option value="individual" ${ui.expType === 'individual' ? 'selected' : ''}>Individuais</option><option value="shared" ${ui.expType === 'shared' ? 'selected' : ''}>Compartilhadas</option></select>
+    <select data-act="f-person" style="width:auto" aria-label="Pessoa"><option value="todas">Todas as pessoas</option>${S.people.map(p => `<option value="${p.id}" ${ui.expPerson === p.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select>` : '';
   return `<div class="view-head"><h2>Despesas</h2><button class="btn" data-act="exp-new">+ Nova despesa</button></div>
-  <div class="toolbar" style="margin-bottom:14px">${monthBar(true)}
-    <select data-act="f-type" style="width:auto" aria-label="Tipo"><option value="todas" ${ui.expType === 'todas' ? 'selected' : ''}>Todos os tipos</option><option value="individual" ${ui.expType === 'individual' ? 'selected' : ''}>Individuais</option><option value="shared" ${ui.expType === 'shared' ? 'selected' : ''}>Compartilhadas</option></select>
-    <select data-act="f-person" style="width:auto" aria-label="Pessoa"><option value="todas">Todas as pessoas</option>${S.people.map(p => `<option value="${p.id}" ${ui.expPerson === p.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></div>
+  <div class="toolbar" style="margin-bottom:14px">${monthBar(true)}${casaFilters}</div>
   <div class="sub" style="margin-bottom:10px">${list.length} lançamento(s) · total ${brl(total)}</div>
   ${list.length ? `<div class="list">${list.map(expRow).join('')}</div>` : `<div class="empty">Nenhuma despesa neste filtro.<br><button class="btn" style="margin-top:12px" data-act="exp-new">Registrar a primeira despesa</button></div>`}`;
 }
 function expRow(e) {
   const paid = e.parcels.filter(p => p.paid).length, n = e.parcels.length;
-  const who = e.type === 'individual' ? `de ${esc(pname(e.owner))}` : `pago por ${esc(pname(e.payer))} · 50/50`;
+  const who = !isCasa() ? '' : e.type === 'individual' ? ` · de ${esc(pname(e.owner))}` : ` · pago por ${esc(pname(e.payer))} · 50/50`;
+  const typeBadge = isCasa() ? `<span class="badge ${e.type === 'shared' ? 'shared' : ''}">${e.type === 'shared' ? 'Compartilhada' : 'Individual'}</span> ` : '';
   return `<div class="row"><div class="grow"><div class="title">${esc(e.desc)}</div>
-    <div class="sub">${fmtDate(e.date)} · ${esc(e.category)} · ${esc(e.method)} · ${who}</div>
-    <div style="margin-top:4px"><span class="badge ${e.type === 'shared' ? 'shared' : ''}">${e.type === 'shared' ? 'Compartilhada' : 'Individual'}</span>
-    ${n > 1 ? ` <span class="badge">${paid}/${n} parcelas pagas</span>` : (paid ? ' <span class="badge ok">Paga</span>' : ' <span class="badge wait">Em aberto</span>')}</div></div>
+    <div class="sub">${fmtDate(e.date)} · ${esc(e.category)} · ${esc(e.method)}${who}</div>
+    <div style="margin-top:4px">${typeBadge}${n > 1 ? `<span class="badge">${paid}/${n} parcelas pagas</span>` : (paid ? '<span class="badge ok">Paga</span>' : '<span class="badge wait">Em aberto</span>')}</div></div>
     <div class="amount">${brl(e.totalCents)}</div>
     <div class="actions"><button class="btn ghost sm" data-act="exp-parcels" data-id="${e.id}">Parcelas</button>
     <button class="btn ghost sm" data-act="exp-edit" data-id="${e.id}">Editar</button>
     <button class="btn danger sm" data-act="exp-del" data-id="${e.id}">Excluir</button></div></div>`;
 }
 function expenseForm(e) {
-  const isEdit = !!e, d = e || { desc: '', totalCents: 0, date: todayStr(), category: S.categories[0], type: 'shared', payer: S.people[0].id, owner: S.people[0].id, method: 'Cartão de crédito', parcels: [{}], notes: '' };
+  const isEdit = !!e, casa = isCasa();
+  const d = e || { desc: '', totalCents: 0, date: todayStr(), category: S.categories[0], type: casa ? 'shared' : 'individual', payer: me().id, owner: me().id, method: 'Cartão de crédito', parcels: [{}], notes: '' };
+  const casaFields = casa ? `
+    <div class="field"><label>Tipo</label><div class="seg"><label><input type="radio" name="type" value="shared" ${d.type === 'shared' ? 'checked' : ''}>Compartilhada (50/50)</label><label><input type="radio" name="type" value="individual" ${d.type === 'individual' ? 'checked' : ''}>Individual</label></div></div>
+    <div class="two"><div class="field"><label for="f_payer">Quem pagou</label><select id="f_payer" name="payer">${optPeople(d.payer)}</select></div>
+    <div class="field" id="ownerBox"><label for="f_owner">De quem é a despesa</label><select id="f_owner" name="owner">${optPeople(d.owner)}</select></div></div>` : '';
   const html = `
     <div class="field"><label for="f_desc">Descrição</label><input type="text" id="f_desc" name="desc" value="${esc(d.desc)}" maxlength="120" required></div>
     <div class="two"><div class="field"><label for="f_total">Valor total (R$)</label><input type="text" inputmode="decimal" id="f_total" name="total" value="${d.totalCents ? moneyInput(d.totalCents) : ''}" placeholder="0,00"></div>
     <div class="field"><label for="f_date">Data da compra</label><input type="date" id="f_date" name="date" value="${d.date}"></div></div>
-    <div class="field"><label>Tipo</label><div class="seg"><label><input type="radio" name="type" value="shared" ${d.type === 'shared' ? 'checked' : ''}>Compartilhada (50/50)</label><label><input type="radio" name="type" value="individual" ${d.type === 'individual' ? 'checked' : ''}>Individual</label></div></div>
-    <div class="two"><div class="field"><label for="f_payer">Quem pagou</label><select id="f_payer" name="payer">${optPeople(d.payer)}</select></div>
-    <div class="field" id="ownerBox"><label for="f_owner">De quem é a despesa</label><select id="f_owner" name="owner">${optPeople(d.owner)}</select></div></div>
+    ${casaFields}
     <div class="two"><div class="field"><label for="f_method">Meio de pagamento</label><select id="f_method" name="method">${optList(METHODS, d.method)}</select></div>
     <div class="field"><label for="f_cat">Categoria</label><select id="f_cat" name="category">${optList(S.categories, d.category)}</select></div></div>
     <div class="two"><div class="field"><label for="f_n">Nº de parcelas</label><input type="number" id="f_n" name="n" min="1" max="48" value="${d.parcels.length}"></div>
@@ -365,25 +458,26 @@ function expenseForm(e) {
       if (!cents || cents <= 0) return 'Informe um valor maior que zero.';
       if (!validDate(date)) return 'Informe uma data válida.';
       if (!Number.isInteger(n) || n < 1 || n > 48) return 'Número de parcelas deve ser de 1 a 48.';
-      const type = fd.get('type'), payer = fd.get('payer');
-      const owner = type === 'individual' ? fd.get('owner') : payer;
+      /* Particular é sempre individual do usuário; Casa permite compartilhada/individual */
+      const type = casa ? fd.get('type') : 'individual';
+      const payer = casa ? fd.get('payer') : me().id;
+      const owner = !casa ? me().id : type === 'individual' ? fd.get('owner') : payer;
       let paidMap = {};
       if (isEdit) e.parcels.forEach(p => paidMap[p.n] = p);
       else if (fd.get('paidFirst')) paidMap[1] = { paid: true, paidDate: date };
-      const obj = { id: isEdit ? e.id : uid(), desc, totalCents: cents, date, category: fd.get('category'), type, payer, owner, method: fd.get('method'), notes: String(fd.get('notes') || '').trim(), parcels: buildParcels(cents, n, date, paidMap) };
+      const obj = { id: isEdit ? e.id : uid(), space: isEdit ? e.space : ui.space, desc, totalCents: cents, date, category: fd.get('category'), type, payer, owner, method: fd.get('method'), notes: String(fd.get('notes') || '').trim(), parcels: buildParcels(cents, n, date, paidMap) };
       if (isEdit) S.expenses[S.expenses.indexOf(e)] = obj; else S.expenses.push(obj);
       return null;
     }
   });
-  const sync = () => { $('#ownerBox', form).style.display = form.elements.type.value === 'individual' ? '' : 'none'; };
-  form.addEventListener('change', sync); sync();
+  if (casa) { const sync = () => { $('#ownerBox', form).style.display = form.elements.type.value === 'individual' ? '' : 'none'; }; form.addEventListener('change', sync); sync(); }
 }
 function parcelsModal(id) {
   const e = S.expenses.find(x => x.id === id); if (!e) return;
-  const html = `<div class="sub" style="margin-bottom:10px">${esc(e.desc)} · ${brl(e.totalCents)} em ${e.parcels.length}x · pagas por ${esc(pname(e.payer))}</div>
+  const html = `<div class="sub" style="margin-bottom:10px">${esc(e.desc)} · ${brl(e.totalCents)} em ${e.parcels.length}x${e.space === 'casa' ? ' · pagas por ' + esc(pname(e.payer)) : ''}</div>
     <div class="list">${e.parcels.map(p => `<label class="row check" style="cursor:pointer"><input type="checkbox" data-parcel="${p.n}" ${p.paid ? 'checked' : ''}>
     <span class="grow">Parcela ${p.n}/${e.parcels.length} · vence ${fmtDate(p.due)}${p.paid && p.paidDate ? ` · paga em ${fmtDate(p.paidDate)}` : ''}</span><b>${brl(p.cents)}</b></label>`).join('')}</div>
-    ${e.type === 'shared' ? '<div class="hint" style="margin-top:8px">Só parcelas pagas entram no acerto entre vocês.</div>' : ''}`;
+    ${e.space === 'casa' && e.type === 'shared' ? '<div class="hint" style="margin-top:8px">Só parcelas pagas entram no acerto entre vocês.</div>' : ''}`;
   const { form } = openModal('Parcelas', html, { hideSubmit: true, cancelLabel: 'Fechar' });
   form.addEventListener('change', ev => {
     const n = +ev.target.dataset.parcel; if (!n) return;
@@ -392,18 +486,17 @@ function parcelsModal(id) {
   });
 }
 
-/* ---------- Acerto ---------- */
-function viewAcerto() {
+/* ---------- Pendências (acerto na Casa; contas em aberto nos dois espaços) ---------- */
+function acertoHtml() {
   const b = balance(), [pa, pb] = S.people;
   const head = !b.owes
-    ? `<div class="big">${S.transfers.length || S.expenses.some(e => e.type === 'shared' && e.parcels.some(p => p.paid)) ? 'Quites' : 'R$ 0,00'}</div><div class="sub">Não há pendência entre vocês.</div>`
+    ? `<div class="big">${S.transfers.length || S.expenses.some(e => e.space === 'casa' && e.type === 'shared' && e.parcels.some(p => p.paid)) ? 'Quites' : 'R$ 0,00'}</div><div class="sub">Não há pendência entre vocês.</div>`
     : `<div class="big">${brl(b.owes.cents)}</div><div class="sub"><b>${esc(pname(b.owes.from))}</b> deve a <b>${esc(pname(b.owes.to))}</b> para equilibrar as contas.</div>`;
   const trs = [...S.transfers].sort((x, y) => y.date.localeCompare(x.date));
-  return `<div class="view-head"><h2>Acerto e repasses</h2><button class="btn" data-act="tr-new">+ Registrar repasse</button></div>
-  <div class="card hero">${head}
+  return `<div class="card hero">${head}
     ${b.owes ? `<div style="margin-top:10px"><button class="btn sm" data-act="tr-suggest">Registrar repasse de ${brl(b.owes.cents)}</button></div>` : ''}</div>
   <div class="section"><h3>Como chegamos nesse número</h3>
-    <div class="grid g2">${[pa, pb].map(p => `<div class="card white"><h3>${esc(p.name)}</h3>
+    <div class="grid g2">${[pa, pb].map(p => `<div class="card"><h3>${esc(p.name)}</h3>
       <div class="sub">Pagou no compartilhado: <b>${brl(b.paidBy[p.id])}</b></div>
       <div class="sub">Parte dele(a) (50/50): <b>${brl(b.shareOf[p.id])}</b></div>
       <div class="sub">Repasses enviados: <b>${brl(S.transfers.filter(t => t.from === p.id).reduce((s, t) => s + t.cents, 0))}</b> · recebidos: <b>${brl(S.transfers.filter(t => t.to === p.id).reduce((s, t) => s + t.cents, 0))}</b></div>
@@ -413,6 +506,20 @@ function viewAcerto() {
     ${trs.length ? `<div class="list">${trs.map(t => `<div class="row"><div class="grow"><div class="title">${esc(pname(t.from))} → ${esc(pname(t.to))}</div><div class="sub">${fmtDate(t.date)}${t.note ? ' · ' + esc(t.note) : ''}</div></div>
       <div class="amount">${brl(t.cents)}</div><div class="actions"><button class="btn danger sm" data-act="tr-del" data-id="${t.id}">Excluir</button></div></div>`).join('')}</div>`
       : `<div class="empty">Nenhum repasse registrado. Repasses abatem a pendência sem alterar as despesas.</div>`}</div>`;
+}
+function viewPendencias() {
+  const m = curMonth();
+  let body;
+  if (isCasa()) {
+    body = acertoHtml() + `<div class="section"><h3>Parcelas em aberto</h3>${openParcelsList()}</div>`;
+  } else {
+    const late = S.students.filter(s => s.active && studentStatus(s, m).key === 'atrasado');
+    const toReceive = inSpace(S.wallet).filter(w => w.status !== 'recebido').sort((a, b) => a.date.localeCompare(b.date));
+    body = `<div class="section" style="margin-top:0"><h3>Parcelas em aberto</h3>${openParcelsList()}</div>
+      <div class="section"><h3>A receber</h3>${toReceive.length ? `<div class="list">${toReceive.map(w => { const [l, c] = walletStatus(w); return `<div class="row"><div class="grow"><div class="title">${esc(w.desc)}</div><div class="sub">${fmtDate(w.date)}</div></div><span class="badge ${c}">${l}</span><div class="amount">${brl(w.cents)}</div><div class="actions"><button class="btn sm" data-act="w-receive" data-id="${w.id}">Marcar recebido</button></div></div>`; }).join('')}</div>` : `<div class="empty">Nada a receber.</div>`}</div>
+      <div class="section"><h3>Mensalidades em atraso (${esc(monthLabel(m))})</h3>${late.length ? `<div class="list">${late.map(s => `<div class="row"><div class="grow"><div class="title">${esc(s.name)}</div><div class="sub">venceu ${fmtDate(dueFor(s, m))}</div></div><span class="badge late">Atrasado</span><div class="amount">${brl(s.feeCents)}</div><div class="actions"><button class="btn ghost sm" data-act="goto-alunos">Ver alunos</button></div></div>`).join('')}</div>` : `<div class="empty">Nenhum aluno em atraso.</div>`}</div>`;
+  }
+  return `<div class="view-head"><h2>Pendências</h2>${isCasa() ? '<button class="btn" data-act="tr-new">+ Registrar repasse</button>' : monthBar(false)}</div>${body}`;
 }
 function transferForm(prefill = {}) {
   const from = prefill.from || S.people[0].id, to = prefill.to || other(from);
@@ -432,21 +539,23 @@ function transferForm(prefill = {}) {
   } });
 }
 
-/* ---------- Carteira ---------- */
+/* ---------- Carteira (recebimentos + alunos no Particular) ---------- */
 const WSTATUS = { recebido: ['Recebido', 'ok'], pendente: ['Pendente', 'wait'], previsto: ['Previsto', ''] };
 function walletStatus(w) { return w.status !== 'recebido' && w.date < todayStr() ? ['Atrasado', 'late'] : WSTATUS[w.status]; }
 function viewCarteira() {
-  const m = ui.month || todayStr().slice(0, 7);
-  const items = S.wallet.filter(w => monthOf(w.date) === m).sort((a, b) => b.date.localeCompare(a.date));
+  const tabs = !isCasa() ? `<div class="subtabs" role="tablist"><button data-act="cart-tab" data-tab="receb" aria-current="${ui.cartTab === 'receb'}">Recebimentos</button><button data-act="cart-tab" data-tab="alunos" aria-current="${ui.cartTab === 'alunos'}">Painel de Alunos</button></div>` : '';
+  if (!isCasa() && ui.cartTab === 'alunos') return `<div class="view-head"><h2>Carteira</h2><button class="btn" data-act="st-new">+ Novo aluno</button></div>${tabs}${alunosHtml()}`;
+  const m = curMonth();
+  const items = inSpace(S.wallet).filter(w => monthOf(w.date) === m).sort((a, b) => b.date.localeCompare(a.date));
   const rec = items.filter(w => w.status === 'recebido').reduce((s, w) => s + w.cents, 0);
   const open = items.filter(w => w.status !== 'recebido').reduce((s, w) => s + w.cents, 0);
-  const tuition = S.payments.filter(p => p.month === m).reduce((s, p) => s + p.cents, 0);
-  return `<div class="view-head"><h2>Carteira</h2><button class="btn" data-act="w-new">+ Novo recebimento</button></div>
+  const tuition = !isCasa() ? S.payments.filter(p => p.month === m).reduce((s, p) => s + p.cents, 0) : 0;
+  return `<div class="view-head"><h2>Carteira</h2><button class="btn" data-act="w-new">+ Novo recebimento</button></div>${tabs}
   <div style="margin-bottom:14px">${monthBar(false)}</div>
   <div class="grid g3">
-    <div class="card hero"><h3>Total recebido</h3><div class="big">${brl(rec + tuition)}</div><div class="sub">Lançamentos + mensalidades</div></div>
+    <div class="card hero"><h3>Total recebido</h3><div class="big">${brl(rec + tuition)}</div><div class="sub">${isCasa() ? 'Entradas da casa' : 'Lançamentos + mensalidades'}</div></div>
     <div class="card"><h3>A receber</h3><div class="big">${brl(open)}</div><div class="sub">Previsto e pendente</div></div>
-    <div class="card"><h3>Mensalidades recebidas</h3><div class="big">${brl(tuition)}</div><div class="sub">Vindo do Painel de Alunos</div></div>
+    ${!isCasa() ? `<div class="card"><h3>Mensalidades recebidas</h3><div class="big">${brl(tuition)}</div><div class="sub">Vindo do Painel de Alunos</div></div>` : ''}
   </div>
   <div class="section"><h3>Lançamentos de ${esc(monthLabel(m))}</h3>
   ${items.length ? `<div class="list">${items.map(w => { const [l, c] = walletStatus(w); return `<div class="row"><div class="grow"><div class="title">${esc(w.desc)}</div>
@@ -469,13 +578,13 @@ function walletForm(w) {
     if (!desc) return 'Informe a descrição.';
     if (!cents || cents <= 0) return 'Informe um valor maior que zero.';
     if (!validDate(date)) return 'Informe uma data válida.';
-    const obj = { id: w ? w.id : uid(), desc, cents, date, kind: fd.get('kind'), status: fd.get('status'), note: String(fd.get('note') || '').trim() };
+    const obj = { id: w ? w.id : uid(), space: w ? w.space : ui.space, desc, cents, date, kind: fd.get('kind'), status: fd.get('status'), note: String(fd.get('note') || '').trim() };
     if (w) S.wallet[S.wallet.indexOf(w)] = obj; else S.wallet.push(obj);
     return null;
   } });
 }
 
-/* ---------- Alunos ---------- */
+/* ---------- Painel de Alunos (dentro da Carteira, só no Particular) ---------- */
 function waLink(st, month) {
   let ph = String(st.phone || '').replace(/\D/g, ''); if (!ph) return '';
   if (ph.length <= 11) ph = '55' + ph;
@@ -485,8 +594,8 @@ function waLink(st, month) {
     : `Olá, ${first}! Tudo bem? Passando para lembrar da mensalidade de ${MESES[+month.slice(5) - 1]} (${brl(st.feeCents)}), com vencimento em ${fmtDate(dueFor(st, month))}. Qualquer dúvida, é só me chamar!`;
   return `https://wa.me/${ph}?text=${encodeURIComponent(txt)}`;
 }
-function viewAlunos() {
-  const m = ui.month || todayStr().slice(0, 7);
+function alunosHtml() {
+  const m = curMonth();
   const all = S.students.filter(s => ui.showInactive || s.active).sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
   const act = S.students.filter(s => s.active);
   const expected = act.reduce((s, st) => s + st.feeCents, 0);
@@ -502,8 +611,7 @@ function viewAlunos() {
       ${link ? `<a class="btn wa sm" href="${link}" target="_blank" rel="noopener">Enviar mensagem</a>` : `<button class="btn wa sm" disabled title="Cadastre o WhatsApp do aluno">Enviar mensagem</button>`}
       <button class="btn ghost sm" data-act="st-edit" data-id="${st.id}">Editar</button><button class="btn danger sm" data-act="st-del" data-id="${st.id}">Excluir</button></div></td></tr>`;
   }).join('');
-  return `<div class="view-head"><h2>Painel de Alunos</h2><button class="btn" data-act="st-new">+ Novo aluno</button></div>
-  <div class="toolbar" style="margin-bottom:14px">${monthBar(false)}<label class="check" style="margin:0"><input type="checkbox" data-act="st-inactive" ${ui.showInactive ? 'checked' : ''}> Mostrar inativos</label></div>
+  return `<div class="toolbar" style="margin-bottom:14px">${monthBar(false)}<label class="check" style="margin:0"><input type="checkbox" data-act="st-inactive" ${ui.showInactive ? 'checked' : ''}> Mostrar inativos</label></div>
   <div class="grid g3" style="margin-bottom:16px">
     <div class="card"><h3>Esperado no mês</h3><div class="big">${brl(expected)}</div></div>
     <div class="card hero"><h3>Recebido</h3><div class="big">${brl(received)}</div></div>
@@ -531,7 +639,7 @@ function studentForm(st) {
   } });
 }
 function payForm(st) {
-  const m = ui.month || todayStr().slice(0, 7);
+  const m = curMonth();
   openModal(`Receber — ${st.name}`, `<div class="sub" style="margin-bottom:10px">Mensalidade de ${esc(monthLabel(m))}</div>
     <div class="two"><div class="field"><label for="p_val">Valor recebido (R$)</label><input type="text" inputmode="decimal" id="p_val" name="val" value="${moneyInput(st.feeCents)}"></div>
     <div class="field"><label for="p_date">Data</label><input type="date" id="p_date" name="date" value="${todayStr()}"></div></div>
@@ -546,19 +654,79 @@ function payForm(st) {
     } });
 }
 
+/* ---------- Tarefas ---------- */
+function taskRow(t) {
+  const late = !t.done && t.due && t.due < todayStr();
+  const who = isCasa() ? (t.assignee === 'both' ? 'Os dois' : pname(t.assignee)) : '';
+  return `<div class="row"><label class="check" style="margin:0"><input type="checkbox" data-act="t-toggle" data-id="${t.id}" ${t.done ? 'checked' : ''} aria-label="Concluir"></label>
+    <div class="grow"><div class="title ${t.done ? 'done' : ''}">${esc(t.title)}</div>
+    <div class="sub">${t.due ? 'até ' + fmtDate(t.due) : 'sem prazo'}${who ? ' · ' + esc(who) : ''}${t.note ? ' · ' + esc(t.note) : ''}</div></div>
+    ${late ? '<span class="badge late">Atrasada</span>' : ''}
+    <div class="actions"><button class="btn ghost sm" data-act="t-edit" data-id="${t.id}">Editar</button><button class="btn danger sm" data-act="t-del" data-id="${t.id}">Excluir</button></div></div>`;
+}
+function viewTarefas() {
+  let list = inSpace(S.tasks);
+  if (ui.taskFilter === 'abertas') list = list.filter(t => !t.done);
+  else if (ui.taskFilter === 'feitas') list = list.filter(t => t.done);
+  list.sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999'));
+  return `<div class="view-head"><h2>Tarefas</h2><button class="btn" data-act="t-new">+ Nova tarefa</button></div>
+  <div class="toolbar" style="margin-bottom:14px"><select data-act="t-filter" style="width:auto" aria-label="Filtro"><option value="abertas" ${ui.taskFilter === 'abertas' ? 'selected' : ''}>Em aberto</option><option value="feitas" ${ui.taskFilter === 'feitas' ? 'selected' : ''}>Concluídas</option><option value="todas" ${ui.taskFilter === 'todas' ? 'selected' : ''}>Todas</option></select></div>
+  ${list.length ? `<div class="list">${list.map(taskRow).join('')}</div>` : `<div class="empty">Nenhuma tarefa aqui.<br><button class="btn" style="margin-top:12px" data-act="t-new">Criar tarefa</button></div>`}`;
+}
+function taskForm(t) {
+  const d = t || { title: '', due: '', assignee: isCasa() ? 'both' : me().id, note: '' };
+  const html = `<div class="field"><label for="k_title">Tarefa</label><input type="text" id="k_title" name="title" value="${esc(d.title)}" maxlength="120"></div>
+    <div class="two"><div class="field"><label for="k_due">Prazo (opcional)</label><input type="date" id="k_due" name="due" value="${esc(d.due)}"></div>
+    ${isCasa() ? `<div class="field"><label for="k_who">Responsável</label><select id="k_who" name="assignee"><option value="both" ${d.assignee === 'both' ? 'selected' : ''}>Os dois</option>${optPeople(d.assignee)}</select></div>` : '<div></div>'}</div>
+    <div class="field"><label for="k_note">Observação</label><input type="text" id="k_note" name="note" value="${esc(d.note || '')}" maxlength="160"></div>`;
+  openModal(t ? 'Editar tarefa' : 'Nova tarefa', html, { onSubmit: fd => {
+    const title = String(fd.get('title')).trim(), due = String(fd.get('due') || '');
+    if (!title) return 'Informe a tarefa.';
+    if (due && !validDate(due)) return 'Prazo inválido.';
+    const obj = { id: t ? t.id : uid(), space: t ? t.space : ui.space, title, due, assignee: isCasa() ? fd.get('assignee') : me().id, note: String(fd.get('note') || '').trim(), done: t ? t.done : false };
+    if (t) S.tasks[S.tasks.indexOf(t)] = obj; else S.tasks.push(obj);
+    return null;
+  } });
+}
+
+/* ---------- Análises ---------- */
+function viewAnalises() {
+  const m = curMonth();
+  const exps = inSpace(S.expenses);
+  const byMonth = mm => exps.reduce((s, e) => s + e.parcels.filter(p => monthOf(p.due) === mm).reduce((a, p) => a + p.cents, 0), 0);
+  const months = Array.from({ length: 6 }, (_, i) => shiftMonth(m, i - 5));
+  const vals = months.map(byMonth), max = Math.max(...vals, 1);
+  const cats = {};
+  exps.forEach(e => e.parcels.forEach(p => { if (monthOf(p.due) === m) cats[e.category] = (cats[e.category] || 0) + p.cents; }));
+  const catList = Object.entries(cats).sort((a, b) => b[1] - a[1]), catMax = catList.length ? catList[0][1] : 1, catTotal = catList.reduce((s, [, v]) => s + v, 0);
+  const methods = {};
+  exps.forEach(e => e.parcels.forEach(p => { if (monthOf(p.due) === m) methods[e.method] = (methods[e.method] || 0) + p.cents; }));
+  const metList = Object.entries(methods).sort((a, b) => b[1] - a[1]);
+  const bar = ([l, v], mx) => `<div class="hbar"><span class="lbl" title="${esc(l)}">${esc(l)}</span><div class="track"><span style="width:${Math.max(2, Math.round(v / mx * 100))}%"></span></div><b>${brl(v)}</b></div>`;
+  const hasAny = exps.length > 0;
+  return `<div class="view-head"><h2>Análises</h2>${monthBar(false)}</div>
+  ${hasAny ? `
+  <div class="card"><h3>Gastos dos últimos 6 meses ${isCasa() ? 'da casa' : ''}</h3>
+    <div class="cols">${months.map((mm, i) => `<div class="col ${mm === m ? 'cur' : ''}"><span class="v">${vals[i] ? brl(vals[i]).replace('R$', '').trim() : ''}</span><div class="b" style="height:${Math.round(vals[i] / max * 100)}%"></div><small>${shortMonth(mm)}</small></div>`).join('')}</div>
+    <div class="sub">Por vencimento das parcelas. Mês selecionado em destaque.</div></div>
+  <div class="grid g2 section">
+    <div class="card"><h3>Por categoria em ${esc(monthLabel(m))}</h3>${catList.length ? catList.map(c => bar(c, catMax)).join('') + `<div class="sub" style="margin-top:8px">Total ${brl(catTotal)}</div>` : '<div class="sub">Sem gastos neste mês.</div>'}</div>
+    <div class="card"><h3>Por meio de pagamento</h3>${metList.length ? metList.map(c => bar(c, metList[0][1])).join('') : '<div class="sub">Sem gastos neste mês.</div>'}</div>
+  </div>` : `<div class="empty">Registre despesas para ver as análises.</div>`}`;
+}
+
 /* ---------- Configurações ---------- */
 function viewConfig() {
   return `<div class="view-head"><h2>Configurações</h2></div>
-  ${storageOk ? '' : '<div class="banner">Este navegador bloqueou o armazenamento: os dados não serão salvos. Exporte um backup antes de sair.</div>'}
-  <div class="card white"><h3>Participantes</h3><form data-form="people"><div class="two">
-    <div class="field"><label for="n_a">Pessoa 1</label><input type="text" id="n_a" name="a" value="${esc(S.people[0].name)}" maxlength="40"></div>
-    <div class="field"><label for="n_b">Pessoa 2</label><input type="text" id="n_b" name="b" value="${esc(S.people[1].name)}" maxlength="40"></div></div>
+  <div class="card"><h3>Participantes</h3><form data-form="people"><div class="two">
+    <div class="field"><label for="n_a">Você</label><input type="text" id="n_a" name="a" value="${esc(S.people[0].name)}" maxlength="40"></div>
+    <div class="field"><label for="n_b">Outra pessoa da casa</label><input type="text" id="n_b" name="b" value="${esc(S.people[1].name)}" maxlength="40"></div></div>
     <button class="btn sm" type="submit">Salvar nomes</button></form></div>
-  <div class="card white section" style="margin-top:14px"><h3>Categorias de despesa</h3><form data-form="cats">
+  <div class="card section" style="margin-top:14px"><h3>Categorias de despesa</h3><form data-form="cats">
     <div class="field"><textarea name="cats" rows="3" aria-label="Categorias">${esc(S.categories.join(', '))}</textarea><div class="hint">Separe por vírgula. Despesas já lançadas mantêm a categoria que tinham.</div></div>
     <button class="btn sm" type="submit">Salvar categorias</button></form></div>
-  <div class="card white section" style="margin-top:14px"><h3>Seus dados</h3>
-    <p class="sub" style="margin-top:0">Os dados ficam salvos <b>neste navegador</b>. A sincronização entre dois celulares ainda não existe: use o backup para levar os dados de um aparelho para outro.</p>
+  <div class="card section" style="margin-top:14px"><h3>Seus dados</h3>
+    <p class="sub" style="margin-top:0">Os dados ficam salvos <b>neste navegador</b>, e o espaço Particular só aparece para quem abre este arquivo neste aparelho. A sincronização entre dois celulares ainda não existe: use o backup para levar os dados de um aparelho para outro.</p>
     <div class="toolbar"><button class="btn" data-act="export">Exportar backup (.json)</button>
     <label class="btn ghost" style="margin:0;cursor:pointer">Importar backup<input type="file" accept="application/json,.json" data-act="import" hidden></label>
     <button class="btn danger" data-act="wipe">Apagar tudo</button></div></div>`;
@@ -566,18 +734,23 @@ function viewConfig() {
 
 /* ---------- render e eventos ---------- */
 function render() {
-  $('#brandSub').textContent = `${S.people[0].name} & ${S.people[1].name}`;
-  $('#tabs').innerHTML = TABS.map(([k, l]) => `<button data-act="goto" data-tab="${k}" ${ui.tab === k ? 'aria-current="page"' : ''}>${l}</button>`).join('');
-  const v = { inicio: viewInicio, despesas: viewDespesas, acerto: viewAcerto, carteira: viewCarteira, alunos: viewAlunos, config: viewConfig }[ui.tab];
-  $('#app').innerHTML = (storageOk || ui.tab === 'config' ? '' : '<div class="banner">Armazenamento do navegador indisponível: nada será salvo.</div>') + v();
+  renderShell();
+  const v = { visao: viewVisao, carteira: viewCarteira, despesas: viewDespesas, tarefas: viewTarefas, pendencias: viewPendencias, analises: viewAnalises, config: viewConfig }[ui.page];
+  $('#app').innerHTML = (storageOk ? '' : '<div class="banner">Este navegador bloqueou o armazenamento: nada será salvo. Exporte um backup antes de sair.</div>') + v();
 }
+const closeMenu = () => { $('#side').classList.remove('open'); $('#scrim').classList.remove('open'); };
 const find = (arr, id) => arr.find(x => x.id === id);
 document.addEventListener('click', ev => {
   const el = ev.target.closest('[data-act]'); if (!el || el.tagName === 'INPUT' || el.tagName === 'SELECT') return;
-  const a = el.dataset.act, id = el.dataset.id;
-  const cur = ui.month || todayStr().slice(0, 7);
+  const a = el.dataset.act, id = el.dataset.id, cur = curMonth();
+  if (el.tagName === 'A' && el.getAttribute('href') === '#') ev.preventDefault();
   switch (a) {
-    case 'goto': ui.tab = el.dataset.tab; render(); scrollTo(0, 0); break;
+    case 'menu-open': $('#side').classList.add('open'); $('#scrim').classList.add('open'); break;
+    case 'menu-close': closeMenu(); break;
+    case 'goto': ui.page = el.dataset.page; closeMenu(); render(); scrollTo(0, 0); break;
+    case 'goto-alunos': ui.page = 'carteira'; ui.cartTab = 'alunos'; render(); scrollTo(0, 0); break;
+    case 'space': ui.space = el.dataset.space; ui.cartTab = 'receb'; ui.expType = 'todas'; ui.expPerson = 'todas'; closeMenu(); render(); break;
+    case 'cart-tab': ui.cartTab = el.dataset.tab; render(); break;
     case 'month-prev': ui.month = shiftMonth(cur, -1); render(); break;
     case 'month-next': ui.month = shiftMonth(cur, 1); render(); break;
     case 'month-all': ui.month = ui.month ? '' : todayStr().slice(0, 7); render(); break;
@@ -597,6 +770,9 @@ document.addEventListener('click', ev => {
     case 'st-pay': payForm(find(S.students, id)); break;
     case 'st-undo': if (confirm('Desfazer o pagamento deste mês?')) { S.payments = S.payments.filter(p => !(p.studentId === id && p.month === cur)); save(); render(); } break;
     case 'st-del': { const s = find(S.students, id); if (s && confirm(`Excluir ${s.name} e o histórico de pagamentos dele(a)?`)) { S.students = S.students.filter(x => x.id !== id); S.payments = S.payments.filter(p => p.studentId !== id); save(); render(); } break; }
+    case 't-new': taskForm(); break;
+    case 't-edit': taskForm(find(S.tasks, id)); break;
+    case 't-del': if (confirm('Excluir esta tarefa?')) { S.tasks = S.tasks.filter(x => x.id !== id); save(); render(); } break;
     case 'export': {
       const blob = new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob), a2 = document.createElement('a');
@@ -610,6 +786,8 @@ document.addEventListener('change', ev => {
   if (a === 'month-set') { ui.month = el.value || todayStr().slice(0, 7); render(); }
   else if (a === 'f-type') { ui.expType = el.value; render(); }
   else if (a === 'f-person') { ui.expPerson = el.value; render(); }
+  else if (a === 't-filter') { ui.taskFilter = el.value; render(); }
+  else if (a === 't-toggle') { const t = find(S.tasks, el.dataset.id); if (t) { t.done = el.checked; save(); render(); } }
   else if (a === 'st-inactive') { ui.showInactive = el.checked; render(); }
   else if (a === 'import') {
     const f = el.files[0]; if (!f) return;
@@ -619,7 +797,7 @@ document.addEventListener('change', ev => {
         const d = JSON.parse(r.result);
         if (!d || !Array.isArray(d.people) || d.people.length !== 2 || !Array.isArray(d.expenses)) throw new Error('formato');
         if (!confirm('Importar este backup substitui os dados atuais. Continuar?')) return;
-        S = Object.assign(freshState(), d); save(); render(); toast('Backup importado');
+        S = migrate(d); save(); render(); toast('Backup importado');
       } catch (e) { alert('Arquivo inválido: não parece um backup do Conta a Dois.'); }
     };
     r.readAsText(f); el.value = '';
@@ -638,7 +816,8 @@ document.addEventListener('submit', ev => {
     S.categories = cats; save(); render(); toast('Categorias salvas');
   }
 });
-document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('#modalRoot').innerHTML = ''; });
+window.addEventListener('resize', () => document.documentElement.style.setProperty('--stickyH', $('#stickytop').offsetHeight + 'px'));
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape') { $('#modalRoot').innerHTML = ''; closeMenu(); } });
 render();
 </script>
 </body>

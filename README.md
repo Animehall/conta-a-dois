@@ -12,7 +12,7 @@ Centralizar o controle financeiro individual e compartilhado, permitindo acompan
 
 ## Como rodar a recriação
 
-Abra `index.html` no navegador. Os dados ficam no `localStorage` do próprio navegador (sem servidor). Use *Configurações → Exportar backup* para levar os dados a outro aparelho. Sincronização entre dois celulares, login, APK e push **não** existem nesta versão.
+Abra `index.html` no navegador. Há dois espaços: **Particular** (só seu) e **Casa · Mariana** (compartilhado, 50/50). Os dados ficam no `localStorage` do próprio navegador (sem servidor). Use *Configurações → Exportar backup* para levar os dados a outro aparelho. Sincronização entre dois celulares, login, APK e push **não** existem nesta versão.
 
 ## Documentação
 

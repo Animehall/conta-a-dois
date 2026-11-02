@@ -28,6 +28,14 @@ Os valores exatos de cores, fontes, espaçamentos, bordas, sombras e breakpoints
 | Tipografia | Ampliada e legível |
 | Estilo geral | Clean |
 
+## Sidebar (confirmada por print de 02/11/2026)
+
+- Logo: quadrado arredondado roxo com ícone de carteira + wordmark "conta a dois." (o "a" mais leve, ponto roxo).
+- Rótulo de seção em caixa alta e cinza-lilás ("MEU PARTICULAR"); itens com ícone de traço; item ativo com fundo lilás claro e texto roxo em negrito.
+- Rodapé: avatar circular com inicial, nome e legenda ("Somente você").
+- Topo: pílulas de espaço (Particular, Casa · Mariana) e faixa lilás com a descrição do espaço.
+- Cores e fonte na recriação são aproximações do print, não tokens originais.
+
 ## Próxima etapa de design
 
 Quando o código ou capturas de tela do site estiverem disponíveis, extrair os tokens reais e documentar componentes, estados (vazio, carregando, erro, sucesso), responsividade e padrões de navegação.

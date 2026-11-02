@@ -38,6 +38,13 @@
 - **Fora do escopo desta versão:** login/convite, sincronização entre aparelhos, Android/APK, push, Firebase.
 - Nota: um prompt externo (Gemini) descrevia uma landing page romântica rosa/dourada; foi descartado em favor dos docs (app de finanças, branco + roxo/lilás).
 
+## 02/11/2026 — Sidebar e espaços Particular/Casa
+
+- Marcus enviou um print do site publicado: seletor de espaço no topo (**Particular** e **Casa · Mariana**), banner do espaço, sidebar com logo "conta a dois." e itens Visão geral, Carteira, Despesas, Tarefas, Pendências, Análises, Configurações; rodapé com avatar, nome e "Somente você".
+- A recriação passou a seguir essa estrutura. Painel de Alunos virou aba dentro da Carteira (só no Particular).
+- **Decisões minhas, a validar:** (1) Particular = despesas individuais do usuário, sem rateio; Casa = compartilhadas 50/50 + acerto + repasses; (2) tarefas e carteira têm espaço próprio; (3) Pendências na Casa mostra o acerto, no Particular mostra parcelas, a receber e mensalidades em atraso; (4) Análises = gráfico dos últimos 6 meses, por categoria e por meio de pagamento (inventado, o print não mostra essa tela).
+- Dados da versão anterior são migrados: compartilhadas e despesas da pessoa 2 vão para a Casa; individuais da pessoa 1 vão para o Particular.
+
 ## Observação
 
 Este histórico é parcial e baseado nas conversas recuperadas. Adicionar novas decisões com data, contexto, decisão tomada e impacto. Diferenciar sempre implementação confirmada, relato histórico, hipótese e planejamento.
